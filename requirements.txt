@@ -1,0 +1,10 @@
+# PyTorch is intentionally NOT installed here. Kaggle already provides torch;
+# reinstalling it wastes disk/RAM and may replace the proven runtime unexpectedly.
+transformers>=4.51.0,<5
+accelerate>=1.0,<2
+safetensors>=0.4,<1
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+pydantic>=2.8,<3
+psutil>=6,<8
+httpx>=0.27,<1
