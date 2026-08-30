@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qwen3-dual-4b-cpu-rest-server"
-version = "0.1.0"
+version = "0.1.1"
 description = "CPU Qwen3 embedding and reranking REST service"
 requires-python = ">=3.10"
 dependencies = [
