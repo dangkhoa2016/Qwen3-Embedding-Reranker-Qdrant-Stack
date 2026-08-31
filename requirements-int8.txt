@@ -1,0 +1,5 @@
+# Install application requirements first; do not reinstall PyTorch.
+-r requirements.txt
+# Install this separately with --no-deps from the PyTorch CPU index so Kaggle's
+# proven torch build is not silently replaced.
+torchao==0.18.0
