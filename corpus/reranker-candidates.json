@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "query": "Which Southeast Asian country uses the baht?",
+  "embedding_query": "quốc gia Đông Nam Á sử dụng đồng baht",
+  "candidates": [
+    {"id":"d00","relevant":false,"text":"Laos is a landlocked country in Southeast Asia. Its official currency is the Lao kip and its capital is Vientiane."},
+    {"id":"d01","relevant":false,"text":"Cambodia is a Southeast Asian country whose official currency is the Cambodian riel. Phnom Penh is its capital."},
+    {"id":"d02","relevant":false,"text":"Myanmar is a Southeast Asian country. Its currency is the kyat and its administrative capital is Naypyidaw."},
+    {"id":"d03","relevant":false,"text":"Vietnam is a Southeast Asian country. The Vietnamese dong is its currency and Hanoi is its capital."},
+    {"id":"d04","relevant":false,"text":"Malaysia is in Southeast Asia. Its currency is the Malaysian ringgit and Kuala Lumpur is the national capital."},
+    {"id":"d05","relevant":false,"text":"Singapore is a city-state in Southeast Asia. It uses the Singapore dollar."},
+    {"id":"d06","relevant":false,"text":"Indonesia is an archipelagic country in Southeast Asia. Its currency is the Indonesian rupiah."},
+    {"id":"d07","relevant":true,"text":"Thailand is a country in Southeast Asia. Its currency is the Thai baht and its capital is Bangkok."},
+    {"id":"d08","relevant":false,"text":"The Philippines is a Southeast Asian archipelago. Its currency is the Philippine peso."},
+    {"id":"d09","relevant":false,"text":"Brunei is located on the island of Borneo in Southeast Asia and uses the Brunei dollar."},
+    {"id":"d10","relevant":false,"text":"Timor-Leste is in Southeast Asia and uses the United States dollar as legal tender."},
+    {"id":"d11","relevant":false,"text":"Ottawa is the capital city of Canada and is located in the province of Ontario."},
+    {"id":"d12","relevant":false,"text":"Japan is an East Asian country whose currency is the Japanese yen and whose capital is Tokyo."},
+    {"id":"d13","relevant":false,"text":"South Korea is an East Asian country that uses the South Korean won."},
+    {"id":"d14","relevant":false,"text":"India is a South Asian country whose currency is the Indian rupee and whose capital is New Delhi."},
+    {"id":"d15","relevant":false,"text":"Bhutan is a Himalayan country in South Asia. Its currency is the Bhutanese ngultrum."},
+    {"id":"d16","relevant":false,"text":"Nepal is a South Asian country that uses the Nepalese rupee and has Kathmandu as its capital."},
+    {"id":"d17","relevant":false,"text":"Australia uses the Australian dollar and its national capital is Canberra."},
+    {"id":"d18","relevant":false,"text":"Switzerland is a European country that uses the Swiss franc."},
+    {"id":"d19","relevant":false,"text":"Brazil is a South American country whose currency is the Brazilian real and whose capital is Brasilia."}
+  ],
+  "k_sets": {
+    "2":  ["d07","d11"],
+    "4":  ["d07","d11","d02","d15"],
+    "5":  ["d07","d11","d02","d15","d18"],
+    "8":  ["d07","d11","d02","d15","d18","d00","d04","d09"],
+    "10": ["d07","d11","d02","d15","d18","d00","d04","d09","d12","d16"],
+    "20": ["d07","d11","d02","d15","d18","d00","d04","d09","d12","d16","d01","d03","d05","d06","d08","d10","d13","d14","d17","d19"]
+  }
+}

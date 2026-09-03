@@ -1,0 +1,20 @@
+[
+  {
+    "id": "demo-en-thailand-baht",
+    "category": "en",
+    "query": "Which Southeast Asian country uses the baht?",
+    "expected_names": ["Thailand", "Thái Lan"]
+  },
+  {
+    "id": "demo-vi-japan-capital",
+    "category": "vi",
+    "query": "Thủ đô của Nhật Bản là thành phố nào?",
+    "expected_names": ["Tokyo", "Tōkyō", "Đông Kinh"]
+  },
+  {
+    "id": "demo-cross-thailand",
+    "category": "cross-language",
+    "query": "Which country has thủ đô Bangkok and uses đồng baht?",
+    "expected_names": ["Thailand", "Thái Lan"]
+  }
+]
