@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qwen3-dual-4b-cpu-rest-server"
-version = "0.1.1"
-description = "CPU Qwen3 embedding and reranking REST service"
+version = "0.2.0"
+description = "CPU Qwen3 embedding + Q4_K_M reranker service with Qdrant 20K Kaggle production demo"
 requires-python = ">=3.10"
 dependencies = [
   "transformers>=4.51.0,<5",
