@@ -1,0 +1,25 @@
+Production-demo source verification (build runtime)
+===================================================
+
+New production-demo focused tests:
+  tests/test_production_demo.py + tests/test_production_demo_operator_files.py
+  RESULT: 16 passed
+
+Qualified lifecycle regression restored:
+  startup failure closes reranker + embedding before singleton lock release
+  RESULT: focused runtime regression PASS
+
+Operator syntax:
+  bash -n scripts/setup-qdrant-production-demo.sh: PASS
+  bash -n scripts/restore-canonical-qdrant-snapshot.sh: PASS
+  py_compile locator/demo CLI: PASS
+  notebook JSON parse: PASS
+
+Full local pytest attempt:
+  84 passed, 3 failed
+  The three failures are baseline Transformers compatibility tests because this artifact-build runtime has no `transformers` package. An attempted dependency installation could not reach PyPI because this runtime has no Internet/DNS. These are not classified as production-demo regressions.
+
+Fresh Kaggle runtime/model/Qdrant acceptance has NOT been executed in this build runtime. The notebook is the acceptance vehicle. K=5 is a proposal pending the notebook's <=600s + semantic + OOM-delta gate.
+
+Provenance note:
+  The requested uploaded full-source binary was not mount-accessible in this tool runtime. The derived source tree was reconstructed from available baseline source + the already-qualified GGUF hybrid overlay; see PRODUCTION_DEMO_PROVENANCE.md. Do not describe this output as byte-for-byte in-place modification of the parent ZIP.
