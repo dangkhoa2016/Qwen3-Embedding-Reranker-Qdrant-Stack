@@ -29,7 +29,7 @@ The final qualification accepted `K=5`, rejected the need for the K=2 fallback, 
 
 ## First public identity
 
-The approved first public package identity is `qwen3-dual-4b-cpu-rest-server==1.0.0`, authored by `Đăng Khoa <i.am@dangkhoa.dev>` under the MIT License.
+The approved first public package identity is `qwen3-embedding-reranker-qdrant-stack==1.0.0`, authored by `Đăng Khoa <i.am@dangkhoa.dev>` under the MIT License. The internal import package remains `qwen_dual_server`; historical internal service/lock identifiers are intentionally retained in protected qualified configuration.
 
 The temporary local packaging version `0.2.3rc1` was never published and is retained only as provenance.
 

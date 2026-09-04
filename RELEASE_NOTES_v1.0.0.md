@@ -1,4 +1,4 @@
-# qwen3-dual-4b-cpu-rest-server 1.0.0
+# qwen3-embedding-reranker-qdrant-stack 1.0.0
 
 **Status: local pre-publication draft.**  
 This project has not yet been published and has no remote repository, tag, or release.
@@ -8,7 +8,7 @@ This project has not yet been published and has no remote repository, tag, or re
 `1.0.0` is the approved first public version of this project. Internal qualification labels such as `v0.2.3c` and the temporary local packaging label `0.2.3rc1` were never public releases.
 
 ```text
-Package: qwen3-dual-4b-cpu-rest-server
+Package: qwen3-embedding-reranker-qdrant-stack
 Version: 1.0.0
 Author: Đăng Khoa <i.am@dangkhoa.dev>
 License: MIT
@@ -69,7 +69,7 @@ Security vulnerabilities should be reported privately rather than disclosed in a
 The verified local regression baseline is:
 
 ```text
-110 passed, 3 failed, 1 skipped
+111 passed, 3 failed, 1 skipped
 KNOWN_BASELINE_FAILURES=3
 NEW_REGRESSION_FAILURES=0
 FULL_REGRESSION_BASELINE_MATCH=PASS

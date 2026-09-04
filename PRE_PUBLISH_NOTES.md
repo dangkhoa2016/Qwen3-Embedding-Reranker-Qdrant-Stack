@@ -1,6 +1,6 @@
 # Local pre-publication notes
 
-This source tree is a **local, unpublished** preparation candidate for the first public release of `qwen3-dual-4b-cpu-rest-server`.
+This source tree is a **local, unpublished** preparation candidate for the first public release of `qwen3-embedding-reranker-qdrant-stack`.
 
 ```text
 PUBLIC_VERSION=1.0.0
@@ -28,7 +28,7 @@ The five qualified semantic files listed in `PRODUCTION_DEMO_PROVENANCE.md` must
 ## Known regression baseline
 
 ```text
-110 passed
+111 passed
 3 failed
 1 skipped
 KNOWN_BASELINE_FAILURES=3

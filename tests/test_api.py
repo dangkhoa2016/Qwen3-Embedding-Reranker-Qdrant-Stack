@@ -101,3 +101,11 @@ def test_rate_limit_is_per_client(monkeypatch):
     with TestClient(app) as client:
         assert client.get("/v1/models", headers=auth()).status_code == 200
         assert client.get("/v1/models", headers=auth()).status_code == 429
+
+
+def test_public_api_identity_uses_new_project_name(monkeypatch):
+    app = create_app(make_settings(monkeypatch), FakeRuntime())
+    assert app.title == "Qwen3-Embedding-Reranker-Qdrant-Stack"
+    with TestClient(app) as client:
+        body = client.get("/health").json()
+        assert body["service"] == "qwen3-embedding-reranker-qdrant-stack"

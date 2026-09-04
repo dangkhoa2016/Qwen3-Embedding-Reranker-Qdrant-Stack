@@ -14,7 +14,7 @@ def test_public_package_metadata_is_pep639_ready_and_url_safe():
     data = tomllib.loads(read("pyproject.toml"))
     project = data["project"]
     assert data["build-system"]["requires"][0].startswith("setuptools>=77")
-    assert project["name"] == "qwen3-dual-4b-cpu-rest-server"
+    assert project["name"] == "qwen3-embedding-reranker-qdrant-stack"
     assert project["version"] == "1.0.0"
     assert project["readme"] == "README.md"
     assert project["license"] == "MIT"
@@ -22,13 +22,15 @@ def test_public_package_metadata_is_pep639_ready_and_url_safe():
     assert "License :: OSI Approved :: MIT License" not in project.get("classifiers", [])
     assert "Programming Language :: Python :: 3" in project["classifiers"]
     assert "Topic :: Scientific/Engineering :: Artificial Intelligence" in project["classifiers"]
-    assert {"qwen3", "embedding", "reranking", "qdrant", "cpu"}.issubset(set(project["keywords"]))
+    assert {"qwen3-embedding", "qwen3-reranker", "qdrant", "text-embeddings", "reranking", "semantic-search", "vector-search", "information-retrieval", "retrieval", "cpu-inference", "gguf"}.issubset(set(project["keywords"]))
     assert "urls" not in project, "do not invent project URLs before a real public repository exists"
 
 
 def test_readme_is_a_complete_public_landing_page():
     text = read("README.md")
     for required in [
+        "# Qwen3-Embedding-Reranker-Qdrant-Stack",
+        "Package: qwen3-embedding-reranker-qdrant-stack",
         "## What this project provides",
         "## Installation",
         "## Quick start",
@@ -61,7 +63,7 @@ def test_security_policy_is_private_report_first_and_unpublished_aware():
 def test_contributing_policy_preserves_qualification_boundary():
     text = read("CONTRIBUTING.md")
     for required in [
-        "110 passed, 3 failed, 1 skipped",
+        "111 passed, 3 failed, 1 skipped",
         "NEW_REGRESSION_FAILURES=0",
         "src/qwen_dual_server/config.py",
         "src/qwen_dual_server/gguf_reranker_engine.py",
