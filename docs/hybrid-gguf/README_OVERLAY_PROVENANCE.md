@@ -1,4 +1,5 @@
 # Qwen3 Hybrid GGUF Reranker Overlay
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](README_OVERLAY_PROVENANCE.vi.md)
 
 This overlay adds an opt-in `llama_cpp` reranker backend to the existing Qwen3 dual-4B CPU server without changing the embedding implementation or the public `/v1/rerank` schema.
 

@@ -1,15 +1,16 @@
 # Contributing
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](CONTRIBUTING.vi.md)
 
 Thank you for helping improve `qwen3-embedding-reranker-qdrant-stack`.
 
-This source is currently a local pre-publication candidate for the first public release (`1.0.0`). The guidelines below are prepared for the future public repository as well as local review work; they do not imply that a remote repository already exists.
+This project is hosted at https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack. These guidelines apply to the public repository and to local review work for the `1.0.0` release line.
 
 ## Before you start
 
 - Use `SECURITY.md` for vulnerability reports. Do not disclose an unpatched security issue in a public issue.
 - Keep changes narrowly scoped and explain the user-visible or operator-visible reason for the change.
 - Do not mix documentation/package-hygiene changes with model-semantic changes unless the semantic change is the explicit purpose of the work.
-- Do not invent repository, release, package-index, documentation, or funding URLs before those resources exist.
+- Use only verified repository, release, package-index, documentation, or funding URLs; do not invent resources that do not exist.
 
 ## Development environment
 
@@ -62,16 +63,24 @@ python -m compileall -q src scripts
 bash -n scripts/*.sh
 ```
 
-The verified pre-publication audit environment currently records:
+The preserved pre-hardening publication-audit baseline was:
 
 ```text
 111 passed, 3 failed, 1 skipped
 KNOWN_BASELINE_FAILURES=3
-NEW_REGRESSION_FAILURES=0
-FULL_REGRESSION_BASELINE_MATCH=PASS
 ```
 
-The three failures are known historical environment/Transformers-compatibility failures from the audit baseline. This is not permission to ignore failures: a new failure, disappearance/replacement of one of the known failures without explanation, or a changed failure set must be investigated.
+After adding bilingual/governance/CI hygiene tests, the current expanded local suite records:
+
+```text
+116 passed, 3 failed, 1 skipped
+BLOCKING_CI_SUITE=116 passed, 1 skipped, 3 deselected
+KNOWN_BASELINE_FAILURES=3
+NEW_REGRESSION_FAILURES=0
+FAILURE_SET_MATCHES_PRE_HARDENING_BASELINE=PASS
+```
+
+The same three historical engine-contract nodes remain the only failures. This is not permission to ignore failures: any new failure, unexplained disappearance/replacement of a known failure, or changed failure set must be investigated.
 
 Changes to publication metadata should also verify the built wheel and sdist, including clean wheel installation, version/author/license metadata, manifest integrity, and source re-extraction.
 
@@ -86,11 +95,11 @@ Keep the following distinctions precise:
 - `K2_FALLBACK=NOT_JUSTIFIED`;
 - the full regression record is not a zero-failure suite.
 
-English and Vietnamese production-demo documentation should remain consistent on qualification state, external artifact requirements, and K=5 behavior.
+Every English/Vietnamese Markdown pair should remain consistent on qualification state, external artifact requirements, and K=5 behavior.
 
 ## Pull requests
 
-When a repository is later created, use the prepared `.github/PULL_REQUEST_TEMPLATE.md`. A useful pull request should state:
+Use the repository's `.github/PULL_REQUEST_TEMPLATE.md`. A useful pull request should state:
 
 - what changes and why;
 - files/components affected;

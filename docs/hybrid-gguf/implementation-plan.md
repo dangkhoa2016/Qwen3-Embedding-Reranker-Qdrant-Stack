@@ -1,4 +1,5 @@
 # Qwen3 Hybrid FP16 Embedding + GGUF Reranker Implementation Plan
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](implementation-plan.vi.md)
 
 > **For agentic workers:** REQUIRED SUB-SKILL: use test-driven development. This project currently has no Git repository for the GGUF experiment, so each task ends with a verification/evidence checkpoint rather than a commit.
 

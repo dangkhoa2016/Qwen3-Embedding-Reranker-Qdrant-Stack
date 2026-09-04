@@ -27,18 +27,57 @@ def test_stage2_r10_qualification_record_is_present():
     assert "FINAL_RELEASE_DEFAULT=K5_READY" in text
 
 
-def test_pre_publish_notes_preserve_unpublished_state():
-    text = read("PRE_PUBLISH_NOTES.md").lower()
-    assert "local" in text
-    assert "unpublished" in text or "not yet been published" in text
-    assert "no remote" in text
+def test_pre_publish_notes_record_source_published_pre_tag_state():
+    text = read("PRE_PUBLISH_NOTES.md")
+    assert "PUBLICATION_STATE=GITHUB_SOURCE_PUBLISHED_ON_MAIN" in text
+    assert "MAIN_SOURCE=PUBLISHED" in text
+    assert "TAG=NONE" in text
+    assert "RELEASE=NONE" in text
+    assert "package-index publication" in text.lower()
 
 
 def test_no_egg_info_residue_in_source_tree():
     assert not list((ROOT / "src").glob("*.egg-info"))
 
 
-def test_release_notes_are_explicitly_prepublication():
-    text = read("RELEASE_NOTES_v1.0.0.md")
-    assert "Status: local pre-publication draft." in text
-    assert "no remote repository, tag, or release" in text
+def test_release_notes_are_publication_state_neutral_and_bilingual():
+    release_en = read("RELEASE_NOTES_v1.0.0.md")
+    release_vi = read("RELEASE_NOTES_v1.0.0.vi.md")
+
+    for required in [
+        "## Publication channels",
+        "Release identity: v1.0.0",
+        "GitHub Release: tagged release channel for canonical release assets",
+        "Package index / PyPI: separate publication channel",
+        "Publication through one channel does not imply publication through another; each channel is verified independently.",
+    ]:
+        assert required in release_en, required
+
+    for required in [
+        "## Kênh phát hành",
+        "Release identity: v1.0.0",
+        "GitHub Release: kênh release theo tag cho canonical release assets",
+        "Package index / PyPI: kênh publication riêng",
+        "Publication qua một kênh không đồng nghĩa đã publication qua kênh khác; từng kênh được kiểm chứng độc lập.",
+    ]:
+        assert required in release_vi, required
+
+    stale_en = [
+        "Status: GitHub source published on `main`; first-release tag and GitHub Release pending.",
+        "Source publication to `main`: complete",
+        "Tag `v1.0.0`: not created yet",
+        "GitHub Release: not created yet",
+        "Package index / PyPI: not published",
+    ]
+    stale_vi = [
+        "first-release tag và GitHub Release đang chờ",
+        "chưa tạo tag `v1.0.0`",
+        "Tag `v1.0.0`: not created yet",
+        "GitHub Release: not created yet",
+        "Package index / PyPI: not published",
+    ]
+
+    for stale in stale_en:
+        assert stale not in release_en, stale
+    for stale in stale_vi:
+        assert stale not in release_vi, stale

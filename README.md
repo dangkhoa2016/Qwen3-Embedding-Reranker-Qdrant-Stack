@@ -1,7 +1,18 @@
 # Qwen3-Embedding-Reranker-Qdrant-Stack
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](README.vi.md)
 
-> **Status:** local pre-publication candidate for the first public release, `1.0.0`.  
-> This project is still unpublished: there is no remote repository, tag, release, or package-index publication yet.
+[![CI](https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack/actions/workflows/ci.yml/badge.svg)](https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-%3E%3D3.10-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Qdrant](https://img.shields.io/badge/Qdrant-1.18.3-red)
+![CPU qualified](https://img.shields.io/badge/CPU-qualified-success)
+
+
+> **CI badge note:** a green CI badge means the blocking repository gates pass. It does not rewrite the preserved local audit record that contains three known historical environment/Transformers-compatibility failures.
+
+> **Repository:** https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack  
+> **Release line:** `1.0.0` is the first public release identity. Package-index publication is separate from GitHub publication.
 
 `qwen3-embedding-reranker-qdrant-stack` is a production-oriented retrieval stack built around Qwen3-Embedding-4B, Qwen3-Reranker-4B, and Qdrant. It provides a CPU-oriented FastAPI service plus a reproducible 20K-point Qdrant production-demo path qualified on a fresh Kaggle CPU session. It is an embedding/retrieval/reranking project, not a chat-LLM server.
 
@@ -246,16 +257,30 @@ python -m compileall -q src scripts
 bash -n scripts/*.sh
 ```
 
-The verified pre-publication audit baseline is:
+The preserved pre-hardening publication-audit baseline was:
 
 ```text
 111 passed, 3 failed, 1 skipped
 KNOWN_BASELINE_FAILURES=3
-NEW_REGRESSION_FAILURES=0
-FULL_REGRESSION_BASELINE_MATCH=PASS
 ```
 
-Those three failures are known historical environment/Transformers-compatibility failures in the qualification audit environment. Do **not** rewrite that record as “all tests pass.” Any new failure or a changed failure set must be investigated before packaging.
+The preserved expanded local audit snapshot taken during bilingual/governance/CI hardening recorded:
+
+```text
+HISTORICAL_LOCAL_EXPANDED_SUITE=116 passed, 3 failed, 1 skipped
+KNOWN_HISTORICAL_FAILURES=3
+NEW_REGRESSION_FAILURES=0
+FAILURE_SET_MATCHES_PRE_HARDENING_BASELINE=PASS
+```
+
+Those numbers are historical audit evidence, not the live blocking-CI count. The current release-candidate blocking gate records:
+
+```text
+BLOCKING_CI_SUITE=119 passed, 1 skipped, 3 deselected
+HISTORICAL_COMPATIBILITY_PROBES=executed separately
+```
+
+The three engine-contract nodes were the complete failure set in the preserved historical local audit. CI keeps them as separate compatibility probes; results under the current dependency environment do not rewrite that historical record. Do **not** summarize the repository as “all tests pass”; the precise release-facing claim is that the blocking CI gates pass.
 
 ## Security
 
@@ -265,7 +290,7 @@ Please read `SECURITY.md` before deployment or vulnerability reporting. Security
 
 Contribution and verification expectations are in `CONTRIBUTING.md`. In particular, the Stage-II qualified semantic files have an explicit requalification boundary: publication-hygiene changes must not silently change them.
 
-Local `.github` issue and pull-request templates are prepared for a future repository, but their presence here does **not** imply that a GitHub repository already exists.
+GitHub issue and pull-request templates are included under `.github/` for this repository.
 
 ## Known limitations
 
@@ -274,7 +299,7 @@ Local `.github` issue and pull-request templates are prepared for a future repos
 - The package does not bundle PyTorch, model weights, GGUF files, Qdrant data, or the hardened llama runtime.
 - The launcher is single-worker by design for the qualified CPU memory model.
 - Built-in bearer authentication and fixed-window rate limiting are not substitutes for network isolation, TLS, reverse-proxy hardening, or broader abuse protection when internet-facing.
-- The current source remains a local pre-publication candidate. Repository URLs, tags, releases, and package-index links must not be invented before those resources actually exist.
+- Source publication, the `v1.0.0` GitHub tag/Release channel, and package-index/PyPI publication are separate release channels and are verified independently.
 
 ## Reproducibility and provenance
 

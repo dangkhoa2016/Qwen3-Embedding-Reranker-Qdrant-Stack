@@ -1,4 +1,6 @@
 # Qwen3 Hybrid CPU Runtime Design
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](design.vi.md)
+
 ## Transformers FP16 Embedding + llama.cpp GGUF Reranker
 
 **Date:** 2026-09-01  

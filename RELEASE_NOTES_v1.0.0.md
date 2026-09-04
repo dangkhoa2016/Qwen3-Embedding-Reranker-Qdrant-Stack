@@ -1,7 +1,8 @@
 # qwen3-embedding-reranker-qdrant-stack 1.0.0
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](RELEASE_NOTES_v1.0.0.vi.md)
 
-**Status: local pre-publication draft.**  
-This project has not yet been published and has no remote repository, tag, or release.
+**Release identity: `qwen3-embedding-reranker-qdrant-stack` `1.0.0`.**
+Repository: https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack. GitHub source publication, tagged GitHub Release publication, and package-index publication are separate release channels and are verified independently.
 
 ## First public release identity
 
@@ -45,11 +46,11 @@ The pre-publication work prepares:
 - MIT SPDX package metadata and shipped `LICENSE` file;
 - author metadata;
 - README long-description/package metadata;
-- public-facing keywords/classifiers without invented project URLs;
+- public-facing keywords/classifiers with the real GitHub project URLs;
 - `MAX_INSTRUCTION_CHARS=1024` in the example configuration;
 - source manifest/build hygiene;
 - `SECURITY.md` and `CONTRIBUTING.md`;
-- local `.github` issue and pull-request templates for a future repository.
+- `.github` issue and pull-request templates for the public repository.
 
 The qualified production semantic files remain protected by byte-identity checks during this publication-hygiene work.
 
@@ -66,17 +67,31 @@ Security vulnerabilities should be reported privately rather than disclosed in a
 
 ## Known test baseline
 
-The verified local regression baseline is:
+The preserved pre-hardening audit baseline was `111 passed, 3 failed, 1 skipped`. A later preserved local audit snapshot from bilingual/governance/CI hardening recorded:
 
 ```text
-111 passed, 3 failed, 1 skipped
-KNOWN_BASELINE_FAILURES=3
+HISTORICAL_LOCAL_EXPANDED_SUITE=116 passed, 3 failed, 1 skipped
+KNOWN_HISTORICAL_FAILURES=3
 NEW_REGRESSION_FAILURES=0
-FULL_REGRESSION_BASELINE_MATCH=PASS
+FAILURE_SET_MATCHES_PRE_HARDENING_BASELINE=PASS
 ```
 
-The three failures are known historical environment/Transformers-compatibility failures in the audit baseline. This release note must not be interpreted as claiming a zero-failure full suite.
+Those numbers are historical audit evidence, not the live blocking-CI count. The release-candidate blocking gate records:
 
-## Publication status
+```text
+BLOCKING_CI_SUITE=119 passed, 1 skipped, 3 deselected
+HISTORICAL_COMPATIBILITY_PROBES=executed separately
+```
 
-Creating a repository, adding a remote, pushing, creating tags/releases, or publishing wheel/sdist artifacts remains outside this draft and requires an explicit later publication decision.
+The three engine-contract nodes were the complete failure set in the preserved historical local audit. CI executes them separately as compatibility probes, so their result under the current dependency environment does not rewrite that historical record. The precise release claim is that the blocking CI gates pass; this release note does not claim a universally zero-failure test suite across dependency environments.
+
+## Publication channels
+
+```text
+Source repository: GitHub
+Release identity: v1.0.0
+GitHub Release: tagged release channel for canonical release assets
+Package index / PyPI: separate publication channel
+```
+
+Publication through one channel does not imply publication through another; each channel is verified independently.

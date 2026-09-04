@@ -1,4 +1,5 @@
 # Kaggle production-demo execution guide
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](guide-production-demo.vi.md)
 
 1. Attach the Qwen3-Embedding-4B Transformers model.
 2. Attach the Qwen3-Reranker-4B Q4_K_M GGUF model.

@@ -1,4 +1,5 @@
 # Qwen3 Dual 4B CPU REST Server — Design Specification
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](2026-08-30-qwen3-dual-4b-cpu-server-design.vi.md)
 
 **Date:** 2026-08-30
 **Version:** v0.1.0

@@ -1,12 +1,13 @@
 # Security Policy
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](SECURITY.vi.md)
 
 ## Current status
 
-This project is currently **unpublished** and is preparing its first public release as `1.0.0`. There is no public repository or GitHub Security Advisory channel yet.
+The public repository is https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack. The `1.0.0` line is the first public release identity. Public repository availability does not change the requirement to report unpatched vulnerabilities privately.
 
-For the pre-publication candidate, the `1.0.0` line is the only actively reviewed release identity. Internal qualification labels such as `v0.2.3c` and the temporary local packaging label `0.2.3rc1` were never public releases and are not separate supported public versions.
+Before the first `v1.0.0` tag is created, the `1.0.0` line is the only actively reviewed release identity. Internal qualification labels such as `v0.2.3c` and the temporary local packaging label `0.2.3rc1` were never public releases and are not separate supported public versions.
 
-This policy should be reviewed again when a public repository or additional release line actually exists.
+This policy should be reviewed again when an additional supported release line or a dedicated private vulnerability-reporting channel is introduced.
 
 ## Reporting a vulnerability
 

@@ -1,4 +1,5 @@
 # Post-release performance roadmap
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](roadmap.vi.md)
 
 Current release scope freezes further CPU tuning. Evidence retained from prior qualification:
 

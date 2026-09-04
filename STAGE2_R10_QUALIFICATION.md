@@ -1,4 +1,5 @@
 # Stage-II R10 qualification
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](STAGE2_R10_QUALIFICATION.vi.md)
 
 This document records the closed production-demo qualification state used as provenance for the first public package candidate.
 

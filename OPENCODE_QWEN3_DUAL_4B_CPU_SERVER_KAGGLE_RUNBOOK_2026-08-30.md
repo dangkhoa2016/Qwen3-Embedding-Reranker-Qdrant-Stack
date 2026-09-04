@@ -1,4 +1,5 @@
 # OpenCode CLI Runbook — Qwen3-Embedding-4B + Qwen3-Reranker-4B CPU/RAM-only Shared REST Server
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](OPENCODE_QWEN3_DUAL_4B_CPU_SERVER_KAGGLE_RUNBOOK_2026-08-30.vi.md)
 
 **Date:** 2026-08-30  
 **Source release:** `qwen3-dual-4b-cpu-rest-server-v0.1.0-with-git.zip`  

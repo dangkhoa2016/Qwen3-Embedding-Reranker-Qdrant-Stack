@@ -1,4 +1,5 @@
 # Qwen3 Dual 4B CPU REST Server Implementation Plan
+> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](2026-08-30-qwen3-dual-4b-cpu-server.vi.md)
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 

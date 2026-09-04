@@ -1,4 +1,5 @@
 # Production Demo: Qwen3 Embedding + Reranker + Qdrant
+> 🌐 Language / Ngôn ngữ: [English](README_PRODUCTION_DEMO.md) | **Tiếng Việt**
 
 Demo này chạy trực tiếp stack retrieval hai model đã được qualification, **không cần Node.js**:
 
