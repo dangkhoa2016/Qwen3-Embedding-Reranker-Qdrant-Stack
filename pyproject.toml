@@ -1,12 +1,30 @@
 [build-system]
-requires = ["setuptools>=70", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "qwen3-dual-4b-cpu-rest-server"
-version = "0.2.0"
-description = "CPU Qwen3 embedding + Q4_K_M reranker service with Qdrant 20K Kaggle production demo"
+version = "1.0.0"
+description = "Local CPU REST service for Qwen3 embeddings and reranking with a qualified Qdrant 20K Kaggle demo"
+readme = "README.md"
 requires-python = ">=3.10"
+authors = [{ name = "Đăng Khoa", email = "i.am@dangkhoa.dev" }]
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = [
+  "qwen3",
+  "embedding",
+  "reranking",
+  "qdrant",
+  "fastapi",
+  "cpu",
+  "gguf",
+  "llama.cpp",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
 dependencies = [
   "transformers>=4.51.0,<5",
   "accelerate>=1.0,<2",
