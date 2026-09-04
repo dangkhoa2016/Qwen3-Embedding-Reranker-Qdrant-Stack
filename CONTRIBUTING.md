@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for helping improve `qwen3-dual-4b-cpu-rest-server`.
+Thank you for helping improve `qwen3-embedding-reranker-qdrant-stack`.
 
 This source is currently a local pre-publication candidate for the first public release (`1.0.0`). The guidelines below are prepared for the future public repository as well as local review work; they do not imply that a remote repository already exists.
 
@@ -65,7 +65,7 @@ bash -n scripts/*.sh
 The verified pre-publication audit environment currently records:
 
 ```text
-110 passed, 3 failed, 1 skipped
+111 passed, 3 failed, 1 skipped
 KNOWN_BASELINE_FAILURES=3
 NEW_REGRESSION_FAILURES=0
 FULL_REGRESSION_BASELINE_MATCH=PASS

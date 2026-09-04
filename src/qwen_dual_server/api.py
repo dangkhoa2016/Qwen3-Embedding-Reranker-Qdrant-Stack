@@ -6,7 +6,7 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from starlette.concurrency import run_in_threadpool
 
-from . import __version__
+from . import __display_name__, __project_name__, __version__
 from .config import Settings
 from .gate import InferenceGate, QueueFullError
 from .schemas import EmbeddingRequest, RerankRequest
@@ -31,7 +31,7 @@ def create_app(settings: Settings, runtime, *, gate=None) -> FastAPI:
             if close is not None:
                 await run_in_threadpool(close)
 
-    app = FastAPI(title="Qwen3 Dual 4B CPU REST Server", version=__version__, lifespan=lifespan)
+    app = FastAPI(title=__display_name__, version=__version__, lifespan=lifespan)
     app.state.settings = settings
     app.state.runtime = runtime
     app.state.inference_gate = inference_gate
@@ -54,7 +54,7 @@ def create_app(settings: Settings, runtime, *, gate=None) -> FastAPI:
 
     @app.get("/health")
     async def health():
-        return {"status": "ok", "service": settings.service_name, "version": __version__}
+        return {"status": "ok", "service": __project_name__, "version": __version__}
 
     @app.get("/ready")
     async def ready():

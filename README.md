@@ -1,9 +1,9 @@
-# Qwen3 Dual 4B CPU REST Server
+# Qwen3-Embedding-Reranker-Qdrant-Stack
 
 > **Status:** local pre-publication candidate for the first public release, `1.0.0`.  
 > This project is still unpublished: there is no remote repository, tag, release, or package-index publication yet.
 
-`qwen3-dual-4b-cpu-rest-server` is a CPU-oriented FastAPI service for Qwen3 embeddings and reranking, plus a reproducible Qdrant production-demo path that was qualified on a fresh Kaggle CPU session.
+`qwen3-embedding-reranker-qdrant-stack` is a production-oriented retrieval stack built around Qwen3-Embedding-4B, Qwen3-Reranker-4B, and Qdrant. It provides a CPU-oriented FastAPI service plus a reproducible 20K-point Qdrant production-demo path qualified on a fresh Kaggle CPU session. It is an embedding/retrieval/reranking project, not a chat-LLM server.
 
 ## What this project provides
 
@@ -249,7 +249,7 @@ bash -n scripts/*.sh
 The verified pre-publication audit baseline is:
 
 ```text
-110 passed, 3 failed, 1 skipped
+111 passed, 3 failed, 1 skipped
 KNOWN_BASELINE_FAILURES=3
 NEW_REGRESSION_FAILURES=0
 FULL_REGRESSION_BASELINE_MATCH=PASS
