@@ -1,5 +1,7 @@
 # Kaggle production-demo execution guide
 
+> English | [Tiếng Việt](guide-production-demo.vi.md)
+
 1. Attach the Qwen3-Embedding-4B Transformers model.
 2. Attach the Qwen3-Reranker-4B Q4_K_M GGUF model.
 3. Attach the canonical Qdrant 20K Dataset containing `knowledge_entities_qwen3_4b_text_v21-20260827T013824Z.snapshot`.

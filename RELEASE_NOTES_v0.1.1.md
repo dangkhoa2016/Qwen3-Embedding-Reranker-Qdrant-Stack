@@ -1,5 +1,7 @@
 # v0.1.1 Release Notes
 
+> English | [Tiếng Việt](RELEASE_NOTES_v0.1.1.vi.md)
+
 **Date:** 2026-08-30
 **Type:** Corrective release
 

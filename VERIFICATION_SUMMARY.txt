@@ -1,4 +1,4 @@
-Qwen3-Embedding-Reranker-Qdrant-Stack — local pre-publication verification summary
+Qwen3-Embedding-Reranker-Qdrant-Stack — pre-tag publication verification summary
 =========================================================================
 
 PUBLIC_PACKAGE_NAME=qwen3-embedding-reranker-qdrant-stack
@@ -6,12 +6,12 @@ PUBLIC_VERSION=1.0.0
 AUTHOR=Đăng Khoa <i.am@dangkhoa.dev>
 LICENSE=MIT
 LICENSE_METADATA=SPDX_PEP639
-PUBLICATION_STATE=UNPUBLISHED
-REMOTE_REPOSITORY=NONE
-GITHUB_REPOSITORY=NONE
+PUBLICATION_STATE=GITHUB_SOURCE_PUBLISHED_ON_MAIN
+REMOTE_REPOSITORY=https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack
+GITHUB_REPOSITORY=https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack
 TAG=NONE
 RELEASE=NONE
-PROJECT_URLS=OMITTED_UNTIL_REAL_URLS_EXIST
+PROJECT_URLS=REAL_GITHUB_URLS_ADDED
 
 Stage-II qualification:
   STAGE2_R10_QUALIFICATION=PASS
@@ -36,14 +36,18 @@ Final Stage-II evidence:
 Recovered 1.0.0 candidate before public-facing audit:
   103 passed, 3 failed, 1 skipped
 
-Current public-facing audit regression:
+Historical public-facing audit regression before bilingual/CI hardening:
   111 passed, 3 failed, 1 skipped
+
+Current expanded repository-hardening regression:
+  116 passed, 3 failed, 1 skipped
+  BLOCKING_CI_SUITE=116 passed, 1 skipped, 3 deselected
   KNOWN_BASELINE_FAILURES=3
   NEW_REGRESSION_FAILURES=0
-  FAILURE_SET_MATCHES_PRE_AUDIT_BASELINE=PASS
+  FAILURE_SET_MATCHES_PRE_HARDENING_BASELINE=PASS
 
-Eight additional passing tests relative to the recovered 103-pass candidate cover public repository/package governance, metadata, packaging hygiene, and the final public identity.
-The three known failures are the same historical environment/Transformers compatibility failures; do not report the full suite as zero failures.
+Twelve additional passing tests relative to the recovered 103-pass candidate cover public repository/package governance, bilingual documentation, CI/community hygiene, metadata, packaging hygiene, and final public identity.
+The same three historical engine-contract nodes remain the only failures; do not report the full suite as zero failures.
 
 Publication hygiene:
   PUBLIC_FACING_REPOSITORY_AUDIT=PASS
@@ -53,10 +57,12 @@ Publication hygiene:
   README_PACKAGE_LONG_DESCRIPTION=ENABLED
   SECURITY_MD=PREPARED
   CONTRIBUTING_MD=PREPARED
-  GITHUB_ISSUE_TEMPLATES=PREPARED_LOCAL_ONLY
-  GITHUB_PULL_REQUEST_TEMPLATE=PREPARED_LOCAL_ONLY
-  CODE_OF_CONDUCT=DEFERRED
-  DEPENDABOT=DEFERRED_UNTIL_REPOSITORY_POLICY
+  GITHUB_ISSUE_TEMPLATES=PREPARED_BILINGUAL
+  GITHUB_PULL_REQUEST_TEMPLATE=PREPARED_BILINGUAL
+  CODE_OF_CONDUCT=PREPARED_BILINGUAL
+  DEPENDABOT=PREPARED
+  CI_WORKFLOW=PREPARED
+  MARKDOWN_BILINGUAL_PAIRS=REQUIRED
   build egg-info residue removed from source candidate
   internal v0.2.3c and temporary 0.2.3rc1 labels are not public releases
   protected qualified semantic files remain subject to byte-identity verification

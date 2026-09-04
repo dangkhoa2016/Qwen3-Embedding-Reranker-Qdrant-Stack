@@ -1,5 +1,7 @@
 # Qwen3 Dual 4B CPU REST Server Implementation Plan
 
+> English | [Tiếng Việt](2026-08-30-qwen3-dual-4b-cpu-server.vi.md)
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build and verify a single-process CPU-only REST inference server for Qwen3-Embedding-4B and Qwen3-Reranker-4B with Kaggle-safe memory controls and evidence tooling.

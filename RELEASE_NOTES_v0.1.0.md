@@ -1,5 +1,7 @@
 # v0.1.0 Release Notes
 
+> English | [Tiếng Việt](RELEASE_NOTES_v0.1.0.vi.md)
+
 Initial qualification release for a CPU/RAM-only shared Qwen3 search inference server.
 
 Highlights:

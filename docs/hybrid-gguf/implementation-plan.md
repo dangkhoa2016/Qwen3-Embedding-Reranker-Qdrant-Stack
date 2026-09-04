@@ -1,5 +1,7 @@
 # Qwen3 Hybrid FP16 Embedding + GGUF Reranker Implementation Plan
 
+> English | [Tiếng Việt](implementation-plan.vi.md)
+
 > **For agentic workers:** REQUIRED SUB-SKILL: use test-driven development. This project currently has no Git repository for the GGUF experiment, so each task ends with a verification/evidence checkpoint rather than a commit.
 
 **Goal:** Add an opt-in `llama_cpp` reranker backend that serves `Qwen3-Reranker-4B.Q4_K_M.gguf` with local `llama-server`, while keeping `Qwen3-Embedding-4B` on the existing Transformers FP16 path and preserving the public FastAPI rerank contract.

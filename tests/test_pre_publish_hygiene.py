@@ -27,18 +27,23 @@ def test_stage2_r10_qualification_record_is_present():
     assert "FINAL_RELEASE_DEFAULT=K5_READY" in text
 
 
-def test_pre_publish_notes_preserve_unpublished_state():
-    text = read("PRE_PUBLISH_NOTES.md").lower()
-    assert "local" in text
-    assert "unpublished" in text or "not yet been published" in text
-    assert "no remote" in text
+def test_pre_publish_notes_record_source_published_pre_tag_state():
+    text = read("PRE_PUBLISH_NOTES.md")
+    assert "PUBLICATION_STATE=GITHUB_SOURCE_PUBLISHED_ON_MAIN" in text
+    assert "MAIN_SOURCE=PUBLISHED" in text
+    assert "TAG=NONE" in text
+    assert "RELEASE=NONE" in text
+    assert "package-index publication" in text.lower()
 
 
 def test_no_egg_info_residue_in_source_tree():
     assert not list((ROOT / "src").glob("*.egg-info"))
 
 
-def test_release_notes_are_explicitly_prepublication():
+def test_release_notes_record_source_published_pre_tag_state():
     text = read("RELEASE_NOTES_v1.0.0.md")
-    assert "Status: local pre-publication draft." in text
-    assert "no remote repository, tag, or release" in text
+    assert "Status: GitHub source published on `main`; first-release tag and GitHub Release pending." in text
+    assert "Source publication to `main`: complete" in text
+    assert "Tag `v1.0.0`: not created yet" in text
+    assert "GitHub Release: not created yet" in text
+    assert "Package index / PyPI: not published" in text

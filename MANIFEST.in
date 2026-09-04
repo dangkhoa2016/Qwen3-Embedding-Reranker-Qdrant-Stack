@@ -1,2 +1,5 @@
+include README.vi.md
 include SECURITY.md
+include SECURITY.vi.md
 include CONTRIBUTING.md
+include CONTRIBUTING.vi.md

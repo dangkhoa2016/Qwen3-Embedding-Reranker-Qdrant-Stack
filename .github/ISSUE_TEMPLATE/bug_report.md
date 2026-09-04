@@ -6,6 +6,8 @@ labels: ""
 assignees: ""
 ---
 
+> English | [Tiếng Việt](bug_report.vi.md)
+
 ## Summary
 
 Describe the defect and its impact.

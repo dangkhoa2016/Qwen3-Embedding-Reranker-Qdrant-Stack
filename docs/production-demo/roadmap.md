@@ -1,5 +1,7 @@
 # Post-release performance roadmap
 
+> English | [Tiếng Việt](roadmap.vi.md)
+
 Current release scope freezes further CPU tuning. Evidence retained from prior qualification:
 
 - Q4_K_M same-host K2: qualified.

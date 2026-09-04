@@ -1,5 +1,7 @@
 # Qwen3 Embedding + Reranker + Qdrant Production Demo
 
+> English | [Tiếng Việt](README_PRODUCTION_DEMO.vi.md)
+
 This demo exercises the qualified two-model retrieval stack directly, without a Node.js application layer:
 
 ```text

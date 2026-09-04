@@ -1,7 +1,9 @@
 # qwen3-embedding-reranker-qdrant-stack 1.0.0
 
-**Status: local pre-publication draft.**  
-This project has not yet been published and has no remote repository, tag, or release.
+> English | [Tiếng Việt](RELEASE_NOTES_v1.0.0.vi.md)
+
+**Status: GitHub source published on `main`; first-release tag and GitHub Release pending.**
+Repository: https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack. The source tree is public on `main`; no `v1.0.0` tag or GitHub Release has been created yet at this checkpoint.
 
 ## First public release identity
 
@@ -45,11 +47,11 @@ The pre-publication work prepares:
 - MIT SPDX package metadata and shipped `LICENSE` file;
 - author metadata;
 - README long-description/package metadata;
-- public-facing keywords/classifiers without invented project URLs;
+- public-facing keywords/classifiers with the real GitHub project URLs;
 - `MAX_INSTRUCTION_CHARS=1024` in the example configuration;
 - source manifest/build hygiene;
 - `SECURITY.md` and `CONTRIBUTING.md`;
-- local `.github` issue and pull-request templates for a future repository.
+- `.github` issue and pull-request templates for the public repository.
 
 The qualified production semantic files remain protected by byte-identity checks during this publication-hygiene work.
 
@@ -66,17 +68,27 @@ Security vulnerabilities should be reported privately rather than disclosed in a
 
 ## Known test baseline
 
-The verified local regression baseline is:
+The preserved pre-hardening audit baseline was `111 passed, 3 failed, 1 skipped`. The expanded bilingual/governance/CI-hardening suite records:
 
 ```text
-111 passed, 3 failed, 1 skipped
+116 passed, 3 failed, 1 skipped
+BLOCKING_CI_SUITE=116 passed, 1 skipped, 3 deselected
 KNOWN_BASELINE_FAILURES=3
 NEW_REGRESSION_FAILURES=0
-FULL_REGRESSION_BASELINE_MATCH=PASS
+FAILURE_SET_MATCHES_PRE_HARDENING_BASELINE=PASS
 ```
 
-The three failures are known historical environment/Transformers-compatibility failures in the audit baseline. This release note must not be interpreted as claiming a zero-failure full suite.
+The same three historical engine-contract nodes remain the only failures. This release note must not be interpreted as claiming a zero-failure full suite.
 
 ## Publication status
 
-Creating a repository, adding a remote, pushing, creating tags/releases, or publishing wheel/sdist artifacts remains outside this draft and requires an explicit later publication decision.
+Publication checkpoint:
+
+```text
+Source publication to `main`: complete
+Tag `v1.0.0`: not created yet
+GitHub Release: not created yet
+Package index / PyPI: not published
+```
+
+Tagging and GitHub Release creation remain separate verified steps after final repository hardening.

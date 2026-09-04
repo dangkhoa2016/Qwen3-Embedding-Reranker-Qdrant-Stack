@@ -1,3 +1,5 @@
+> English | [Tiếng Việt](PULL_REQUEST_TEMPLATE.vi.md)
+
 ## Summary
 
 Describe what this change does and why it is needed.
@@ -27,7 +29,7 @@ tests/test_production_demo.py
 
 ## Verification
 
-List the exact commands run and paste/summarize their exact outcomes. Do not write “all tests pass” when the current verified audit baseline is `110 passed, 3 failed, 1 skipped`.
+List the exact commands run and paste/summarize their exact outcomes. Do not write “all tests pass” when the current verified audit baseline is `116 passed, 3 failed, 1 skipped` (expanded hardening suite; same three historical nodes).
 
 ```text
 <commands and results>

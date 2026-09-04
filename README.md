@@ -1,11 +1,22 @@
 # Qwen3-Embedding-Reranker-Qdrant-Stack
 
-> **Status:** local pre-publication candidate for the first public release, `1.0.0`.  
-> This project is still unpublished: there is no remote repository, tag, release, or package-index publication yet.
+[![CI](https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack/actions/workflows/ci.yml/badge.svg)](https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-%3E%3D3.10-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Qdrant](https://img.shields.io/badge/Qdrant-1.18.3-red)
+![CPU qualified](https://img.shields.io/badge/CPU-qualified-success)
+
+> English | [Tiếng Việt](README.vi.md)
+
+> **CI badge note:** a green CI badge means the blocking repository gates pass. It does not rewrite the preserved local audit record that contains three known historical environment/Transformers-compatibility failures.
+
+> **Repository:** https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack  
+> **Release line:** `1.0.0` is the first public release identity. Package-index publication is separate from GitHub publication.
 
 `qwen3-embedding-reranker-qdrant-stack` is a production-oriented retrieval stack built around Qwen3-Embedding-4B, Qwen3-Reranker-4B, and Qdrant. It provides a CPU-oriented FastAPI service plus a reproducible 20K-point Qdrant production-demo path qualified on a fresh Kaggle CPU session. It is an embedding/retrieval/reranking project, not a chat-LLM server.
 
-The prepared first-public-release identity is:
+The first-public-release identity is:
 
 ```text
 Package: qwen3-embedding-reranker-qdrant-stack
@@ -13,6 +24,7 @@ Version: 1.0.0
 Author: Đăng Khoa <i.am@dangkhoa.dev>
 License: MIT
 Python: >=3.10
+Repository: https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack
 ```
 
 Internal labels such as `v0.2.3c` and the temporary local label `0.2.3rc1` are qualification/provenance identifiers only. They were never public releases.
@@ -260,16 +272,24 @@ python -m compileall -q src scripts
 bash -n scripts/*.sh
 ```
 
-The verified pre-publication audit baseline is:
+The preserved pre-hardening publication-audit baseline was:
 
 ```text
 111 passed, 3 failed, 1 skipped
 KNOWN_BASELINE_FAILURES=3
-NEW_REGRESSION_FAILURES=0
-FULL_REGRESSION_BASELINE_MATCH=PASS
 ```
 
-Those three failures are known historical environment/Transformers-compatibility failures in the qualification audit environment. Do **not** rewrite that record as “all tests pass.” Any new failure or a changed failure set must be investigated before packaging.
+After adding bilingual/governance/CI hygiene tests, the current expanded local suite records:
+
+```text
+116 passed, 3 failed, 1 skipped
+BLOCKING_CI_SUITE=116 passed, 1 skipped, 3 deselected
+KNOWN_BASELINE_FAILURES=3
+NEW_REGRESSION_FAILURES=0
+FAILURE_SET_MATCHES_PRE_HARDENING_BASELINE=PASS
+```
+
+The same three historical engine-contract nodes remain the only failures. Do **not** rewrite this as “all tests pass.” Any new failure or a changed failure set must be investigated before packaging.
 
 ## Security
 
@@ -279,7 +299,7 @@ Please read `SECURITY.md` before deployment or vulnerability reporting. Security
 
 Contribution and verification expectations are in `CONTRIBUTING.md`. In particular, the Stage-II qualified semantic files have an explicit requalification boundary: publication-hygiene changes must not silently change them.
 
-Local `.github` issue and pull-request templates are prepared for a future repository, but their presence here does **not** imply that a GitHub repository already exists.
+GitHub issue and pull-request templates are included under `.github/` for this repository.
 
 ## Known limitations
 
@@ -288,7 +308,7 @@ Local `.github` issue and pull-request templates are prepared for a future repos
 - The package does not bundle PyTorch, model weights, GGUF files, Qdrant data, or the hardened llama runtime.
 - The launcher is single-worker by design for the qualified CPU memory model.
 - Built-in bearer authentication and fixed-window rate limiting are not substitutes for network isolation, TLS, reverse-proxy hardening, or broader abuse protection when internet-facing.
-- The current source remains a local pre-publication candidate. Repository URLs, tags, releases, and package-index links must not be invented before those resources actually exist.
+- Source is published on the repository `main` branch. The `v1.0.0` tag and GitHub Release are not created yet, and package-index/PyPI publication remains a separate step.
 
 ## Reproducibility and provenance
 
