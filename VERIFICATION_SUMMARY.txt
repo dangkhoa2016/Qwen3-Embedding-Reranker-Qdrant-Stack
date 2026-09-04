@@ -1,25 +1,62 @@
-Production-demo source verification (build runtime)
-===================================================
+Qwen3 Dual 4B CPU REST Server — local pre-publication verification summary
+=========================================================================
 
-New production-demo focused tests:
-  tests/test_production_demo.py + tests/test_production_demo_operator_files.py
-  RESULT: 16 passed
+PUBLIC_PACKAGE_NAME=qwen3-dual-4b-cpu-rest-server
+PUBLIC_VERSION=1.0.0
+AUTHOR=Đăng Khoa <i.am@dangkhoa.dev>
+LICENSE=MIT
+LICENSE_METADATA=SPDX_PEP639
+PUBLICATION_STATE=UNPUBLISHED
+REMOTE_REPOSITORY=NONE
+GITHUB_REPOSITORY=NONE
+TAG=NONE
+RELEASE=NONE
+PROJECT_URLS=OMITTED_UNTIL_REAL_URLS_EXIST
 
-Qualified lifecycle regression restored:
-  startup failure closes reranker + embedding before singleton lock release
-  RESULT: focused runtime regression PASS
+Stage-II qualification:
+  STAGE2_R10_QUALIFICATION=PASS
+  STAGE2_R3_TO_R10=CLOSED
+  SEMANTIC_3_OF_3=True
+  VI_TOKYO_MINUS_JAPAN=0.06420749425888062
+  OOM_GATE=PASS
+  POST_PACKAGE_RUN_ALL_SECONDS=594.964
+  RUN_ALL_WITHIN_600S=True
+  K5_DEFAULT=ACCEPT
+  K2_FALLBACK=NOT_JUSTIFIED
+  FINAL_RELEASE_DEFAULT=K5_READY
 
-Operator syntax:
-  bash -n scripts/setup-qdrant-production-demo.sh: PASS
-  bash -n scripts/restore-canonical-qdrant-snapshot.sh: PASS
-  py_compile locator/demo CLI: PASS
-  notebook JSON parse: PASS
+Frozen qualified source:
+  SHA256=dfbf98b1e89a123106cea8142e87e1fdcb08175573f361b74024791b7398b8e2
 
-Full local pytest attempt:
-  84 passed, 3 failed
-  The three failures are baseline Transformers compatibility tests because this artifact-build runtime has no `transformers` package. An attempted dependency installation could not reach PyPI because this runtime has no Internet/DNS. These are not classified as production-demo regressions.
+Final Stage-II evidence:
+  SHA256=0b861e95bb34c2f207e5ad22ea7675891e5711043983a6a5e02b283efd2196a7
+  ZIP CRC=PASS
+  MANIFEST=42/42 PASS
 
-Fresh Kaggle runtime/model/Qdrant acceptance has NOT been executed in this build runtime. The notebook is the acceptance vehicle. K=5 is a proposal pending the notebook's <=600s + semantic + OOM-delta gate.
+Recovered 1.0.0 candidate before public-facing audit:
+  103 passed, 3 failed, 1 skipped
 
-Provenance note:
-  The requested uploaded full-source binary was not mount-accessible in this tool runtime. The derived source tree was reconstructed from available baseline source + the already-qualified GGUF hybrid overlay; see PRODUCTION_DEMO_PROVENANCE.md. Do not describe this output as byte-for-byte in-place modification of the parent ZIP.
+Current public-facing audit regression:
+  110 passed, 3 failed, 1 skipped
+  KNOWN_BASELINE_FAILURES=3
+  NEW_REGRESSION_FAILURES=0
+  FAILURE_SET_MATCHES_PRE_AUDIT_BASELINE=PASS
+
+The six additional passing tests cover public repository/package governance and metadata.
+The three known failures are the same historical environment/Transformers compatibility failures; do not report the full suite as zero failures.
+
+Publication hygiene:
+  PUBLIC_FACING_REPOSITORY_AUDIT=PASS
+  MAX_INSTRUCTION_CHARS=1024
+  PEP639_LICENSE_EXPRESSION=MIT
+  LICENSE_FILE_INCLUDED=REQUIRED
+  README_PACKAGE_LONG_DESCRIPTION=ENABLED
+  SECURITY_MD=PREPARED
+  CONTRIBUTING_MD=PREPARED
+  GITHUB_ISSUE_TEMPLATES=PREPARED_LOCAL_ONLY
+  GITHUB_PULL_REQUEST_TEMPLATE=PREPARED_LOCAL_ONLY
+  CODE_OF_CONDUCT=DEFERRED
+  DEPENDABOT=DEFERRED_UNTIL_REPOSITORY_POLICY
+  build egg-info residue removed from source candidate
+  internal v0.2.3c and temporary 0.2.3rc1 labels are not public releases
+  protected qualified semantic files remain subject to byte-identity verification

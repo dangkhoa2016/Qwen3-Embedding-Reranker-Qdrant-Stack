@@ -1,1 +1,1 @@
-__version__ = "0.1.1-int8-exp.1"
+__version__ = "1.0.0"
