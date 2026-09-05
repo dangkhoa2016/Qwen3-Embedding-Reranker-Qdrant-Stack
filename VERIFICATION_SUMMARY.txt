@@ -1,68 +1,40 @@
-Qwen3-Embedding-Reranker-Qdrant-Stack — pre-tag publication verification summary
-=========================================================================
+Qwen3-Embedding-Reranker-Qdrant-Stack — 1.0.0 verification summary
+=================================================================
 
 PUBLIC_PACKAGE_NAME=qwen3-embedding-reranker-qdrant-stack
 PUBLIC_VERSION=1.0.0
 AUTHOR=Đăng Khoa <i.am@dangkhoa.dev>
 LICENSE=MIT
 LICENSE_METADATA=SPDX_PEP639
-PUBLICATION_STATE=GITHUB_SOURCE_PUBLISHED_ON_MAIN
 REMOTE_REPOSITORY=https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack
-GITHUB_REPOSITORY=https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack
-TAG=NONE
-RELEASE=NONE
-PROJECT_URLS=REAL_GITHUB_URLS_ADDED
+RELEASE_TAG=v1.0.0
+GITHUB_RELEASE=PUBLISHED
+PACKAGE_INDEX_PYPI=NOT_PUBLISHED
 
-Stage-II qualification:
-  STAGE2_R10_QUALIFICATION=PASS
-  STAGE2_R3_TO_R10=CLOSED
-  SEMANTIC_3_OF_3=True
-  VI_TOKYO_MINUS_JAPAN=0.06420749425888062
-  OOM_GATE=PASS
-  POST_PACKAGE_RUN_ALL_SECONDS=594.964
-  RUN_ALL_WITHIN_600S=True
-  K5_DEFAULT=ACCEPT
-  K2_FALLBACK=NOT_JUSTIFIED
-  FINAL_RELEASE_DEFAULT=K5_READY
+Production qualification:
+  RESULT=PASS
+  RETRIEVAL_DEFAULT_K=5
+  SEMANTIC_VALIDATION=3/3 PASS
+  CGROUP_OOM_EVENTS=0
+  CGROUP_OOM_KILL_EVENTS=0
+  RUN_ALL_SECONDS=594.964
+  QUALIFICATION_THRESHOLD_SECONDS=600
 
-Frozen qualified source:
-  SHA256=dfbf98b1e89a123106cea8142e87e1fdcb08175573f361b74024791b7398b8e2
+Verified data/runtime identities:
+  QDRANT_VERSION=1.18.3
+  SNAPSHOT_SHA256=71f12fe14ef51966069347290ad15302d389e488d7904dab6cf0cf190f43064f
+  RERANKER_GGUF_SHA256=941f7d1d1524251c026a797b803ac9575545c5d7aa19b26e0e49661d7720af49
+  LLAMA_LAUNCHER_SHA256=28a79707376877f09065fa05fda5a9a6f57dfb4aed01c9918123667e38ae1f41
+  LLAMA_IMPLEMENTATION_SHA256=c4807f2f10cdf354270ac97c1f091d0846e8154749b4b8347f5f26a40184d425
+  INSTRUCTION_SHA256=81053e1bc7e386372ac6ea12f5523e3ea07c3b35d812f43555b1aa407eda5bc6
 
-Final Stage-II evidence:
-  SHA256=0b861e95bb34c2f207e5ad22ea7675891e5711043983a6a5e02b283efd2196a7
-  ZIP CRC=PASS
-  MANIFEST=42/42 PASS
+Canonical GitHub release assets:
+  wheel SHA256=d27942056fbb81fda599a97680526d462407e41d7c6c45a4de39bcdcfc61dc34
+  sdist SHA256=3c9f80c224a5ec1aff5def3cbb7c9cb406addd093e811e75966376219fff7fe3
 
-Recovered 1.0.0 candidate before public-facing audit:
-  103 passed, 3 failed, 1 skipped
-
-Historical public-facing audit regression before bilingual/CI hardening:
-  111 passed, 3 failed, 1 skipped
-
-Current expanded repository-hardening regression:
-  116 passed, 3 failed, 1 skipped
-  BLOCKING_CI_SUITE=116 passed, 1 skipped, 3 deselected
-  KNOWN_BASELINE_FAILURES=3
-  NEW_REGRESSION_FAILURES=0
-  FAILURE_SET_MATCHES_PRE_HARDENING_BASELINE=PASS
-
-Twelve additional passing tests relative to the recovered 103-pass candidate cover public repository/package governance, bilingual documentation, CI/community hygiene, metadata, packaging hygiene, and final public identity.
-The same three historical engine-contract nodes remain the only failures; do not report the full suite as zero failures.
-
-Publication hygiene:
-  PUBLIC_FACING_REPOSITORY_AUDIT=PASS
-  MAX_INSTRUCTION_CHARS=1024
-  PEP639_LICENSE_EXPRESSION=MIT
-  LICENSE_FILE_INCLUDED=REQUIRED
-  README_PACKAGE_LONG_DESCRIPTION=ENABLED
-  SECURITY_MD=PREPARED
-  CONTRIBUTING_MD=PREPARED
-  GITHUB_ISSUE_TEMPLATES=PREPARED_BILINGUAL
-  GITHUB_PULL_REQUEST_TEMPLATE=PREPARED_BILINGUAL
-  CODE_OF_CONDUCT=PREPARED_BILINGUAL
-  DEPENDABOT=PREPARED
-  CI_WORKFLOW=PREPARED
-  MARKDOWN_BILINGUAL_PAIRS=REQUIRED
-  build egg-info residue removed from source candidate
-  internal v0.2.3c and temporary 0.2.3rc1 labels are not public releases
-  protected qualified semantic files remain subject to byte-identity verification
+Verification policy:
+  - GitHub CI validates Python 3.10 and Python 3.12.
+  - Blocking regression checks must pass.
+  - Compatibility probes are executed separately.
+  - Package builds and source-manifest integrity are verified.
+  - Documentation must present public outcomes rather than internal development history.

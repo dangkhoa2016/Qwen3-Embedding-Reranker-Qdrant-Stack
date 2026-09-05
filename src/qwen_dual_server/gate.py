@@ -12,7 +12,7 @@ class QueueFullError(RuntimeError):
 class InferenceGate:
     def __init__(self, max_concurrency: int = 1, max_waiters: int = 32):
         if max_concurrency != 1:
-            raise ValueError("v0.1.0 requires max_concurrency=1 for CPU memory safety")
+            raise ValueError("max_concurrency must remain 1 for qualified CPU memory safety")
         self._semaphore = asyncio.Semaphore(max_concurrency)
         self._state_lock = asyncio.Lock()
         self._active = 0

@@ -53,7 +53,7 @@ if git -C "$ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
 fi
 find "$ROOT" -maxdepth 4 -type f -not -path '*/.git/*' -printf '%p\t%s\n' | sort > "$RUN_ROOT/evidence/source-tree.txt"
 
-OUT="$RUN_ROOT/package/qwen3-dual-4b-cpu-evidence-$(date -u +%Y%m%dT%H%M%SZ).zip"
+OUT="$RUN_ROOT/package/qwen3-embedding-reranker-qdrant-stack-cpu-evidence-$(date -u +%Y%m%dT%H%M%SZ).zip"
 python - "$RUN_ROOT" "$OUT" <<'PY'
 import os, sys, zipfile
 root, out = sys.argv[1:]

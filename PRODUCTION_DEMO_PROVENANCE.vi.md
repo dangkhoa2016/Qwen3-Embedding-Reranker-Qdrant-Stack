@@ -1,42 +1,59 @@
-# Provenance source của production demo
+# Provenance của production demo
 > 🌐 Language / Ngôn ngữ: [English](PRODUCTION_DEMO_PROVENANCE.md) | **Tiếng Việt**
 
-## Qualified frozen source
+Tài liệu này ghi lại public runtime, data và artifact identities dùng cho production demo `1.0.0`.
 
-Authoritative Stage-II qualified source là internal artifact:
-
-```text
-qwen3-hybrid-fp16-embedding-gguf-reranker-qdrant-production-demo-source-v0.2.3c.zip
-size=139820 bytes
-SHA256=dfbf98b1e89a123106cea8142e87e1fdcb08175573f361b74024791b7398b8e2
-```
-
-`v0.2.3c` là internal qualification label và chưa từng là public release.
-
-Frozen archive không bị sửa tại chỗ. Publication-hygiene work được thực hiện trên các bản extracted/staged.
-
-## Stage-II evidence
-
-Final evidence archive:
+## Release identity
 
 ```text
-qwen3-production-demo-v0.2.3c-stage2-fresh-qualification-evidence.zip
-SHA256=0b861e95bb34c2f207e5ad22ea7675891e5711043983a6a5e02b283efd2196a7
-ZIP CRC=PASS
-MANIFEST=42/42 PASS
+Package=qwen3-embedding-reranker-qdrant-stack
+Version=1.0.0
+Author=Đăng Khoa <i.am@dangkhoa.dev>
+License=MIT
 ```
 
-Final qualification chấp nhận `K=5`, bác bỏ nhu cầu K=2 fallback và đóng R3→R10 corrective chain.
+Internal Python package namespace vẫn là `qwen_dual_server`.
 
-## First public identity
+## Model và runtime identities
 
-Approved first public package identity là `qwen3-embedding-reranker-qdrant-stack==1.0.0`, author `Đăng Khoa <i.am@dangkhoa.dev>` theo MIT License. Internal import package vẫn là `qwen_dual_server`; historical internal service/lock identifiers được chủ đích giữ lại trong protected qualified configuration.
+```text
+Embedding model=Qwen3-Embedding-4B
+Embedding backend=Transformers / PyTorch CPU FP16
+Reranker model=Qwen3-Reranker-4B
+Reranker format=GGUF Q4_K_M
+Reranker GGUF SHA256=941f7d1d1524251c026a797b803ac9575545c5d7aa19b26e0e49661d7720af49
+llama.cpp pin=b10699
+llama launcher SHA256=28a79707376877f09065fa05fda5a9a6f57dfb4aed01c9918123667e38ae1f41
+llama implementation SHA256=c4807f2f10cdf354270ac97c1f091d0846e8154749b4b8347f5f26a40184d425
+```
 
-Temporary local packaging version `0.2.3rc1` chưa từng publish và chỉ được giữ làm provenance.
+## Qdrant data identity
 
-## Protected semantic contract
+```text
+Qdrant version=1.18.3
+collection=knowledge_entities_qwen3_4b_text_v21
+points=20000
+vector size=2560
+distance=cosine
+snapshot=knowledge_entities_qwen3_4b_text_v21-20260827T013824Z.snapshot
+snapshot size=283812352 bytes
+snapshot SHA256=71f12fe14ef51966069347290ad15302d389e488d7904dab6cf0cf190f43064f
+```
 
-Publication work phải giữ byte identity cho:
+Production demo restore snapshot này thay vì rebuild collection.
+
+## Behavior đã kiểm chứng
+
+- Retrieval default: `K=5`.
+- Semantic validation: 3/3 đạt.
+- cgroup OOM và OOM-kill events: zero trong lần chạy đã kiểm chứng.
+- End-to-end Run All: `594.964s` trong ngưỡng qualification `600s`.
+
+Xem `PRODUCTION_QUALIFICATION.vi.md` cho complete public qualification summary.
+
+## Các file nhạy cảm với qualification
+
+Các file sau định nghĩa behavior nhạy cảm với qualification:
 
 ```text
 src/qwen_dual_server/config.py
@@ -46,4 +63,4 @@ tests/test_gguf_reranker_engine.py
 tests/test_production_demo.py
 ```
 
-Thay đổi một trong các file này đòi hỏi quyết định xem có phải mở lại Stage-II qualification hay không.
+Behavioral changes vào các file này cần explicit review và có thể cần fresh qualification evidence.

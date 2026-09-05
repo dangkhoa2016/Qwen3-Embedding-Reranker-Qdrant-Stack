@@ -5,6 +5,7 @@ import pytest
 from pydantic import ValidationError
 
 from qwen_dual_server.config import Settings
+from qwen_dual_server.gate import InferenceGate
 from qwen_dual_server.memory import bytes_to_gib, parse_memory_events
 from qwen_dual_server.process_lock import ProcessSingletonLock, ProcessSingletonLockError
 
@@ -20,6 +21,8 @@ def test_settings_have_cpu_safe_defaults(monkeypatch):
     assert s.second_model_min_available_gib == 10
     assert s.final_min_available_gib == 4
     assert s.allow_remote_model_download is False
+    assert s.service_name == "qwen3-embedding-reranker-qdrant-stack"
+    assert s.runtime_lock_path == Path("/tmp/qwen3-embedding-reranker-qdrant-stack.lock")
 
 
 def test_settings_reject_unsupported_dtype(monkeypatch):
@@ -58,3 +61,9 @@ def test_process_singleton_lock_blocks_second_process(tmp_path):
     assert p.exitcode == 0
     assert q.get(timeout=2) == "blocked"
     primary.release()
+
+
+
+def test_inference_gate_rejects_parallel_cpu_concurrency():
+    with pytest.raises(ValueError, match="qualified CPU memory safety"):
+        InferenceGate(max_concurrency=2)

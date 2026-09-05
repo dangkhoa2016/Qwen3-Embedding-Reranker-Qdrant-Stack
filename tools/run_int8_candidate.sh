@@ -39,7 +39,7 @@ fi
 
 case "$QUANT_MODE" in int8-a8w8|int8-weight-only) ;; *) echo "invalid quantization mode: $QUANT_MODE" >&2; exit 32;; esac
 
-SECRET_ENV="/tmp/qwen3-dual-int8-${CANDIDATE_ID}-$$.env"
+SECRET_ENV="/tmp/qwen3-stack-int8-${CANDIDATE_ID}-$$.env"
 umask 077
 KEY="$(openssl rand -hex 32)"; test "${#KEY}" -eq 64
 printf 'export DUAL_API_KEY=%q\n' "$KEY" > "$SECRET_ENV"; chmod 600 "$SECRET_ENV"; unset KEY

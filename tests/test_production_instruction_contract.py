@@ -6,11 +6,11 @@ from qwen_dual_server.api import create_app
 from qwen_dual_server.config import Settings
 from qwen_dual_server.production_demo import CANDIDATE_ANSWER_RERANK_INSTRUCTION
 
-EXPECTED_H3 = """Judge YES only when the Candidate entity itself is the answer entity requested by the Query.
+EXPECTED_PRODUCTION_INSTRUCTION = """Judge YES only when the Candidate entity itself is the answer entity requested by the Query.
 Use the Candidate entity's identity and entity type to decide whether it satisfies what the Query asks for.
 Facts in the Document are evidence only. A Document may be relevant and still be NO if its Candidate entity merely contains, names, describes, or points to the correct answer rather than being that answer itself.
 Judge NO when the Candidate entity's identity or entity type is incompatible with the requested answer entity."""
-EXPECTED_H3_SHA = "81053e1bc7e386372ac6ea12f5523e3ea07c3b35d812f43555b1aa407eda5bc6"
+EXPECTED_PRODUCTION_INSTRUCTION_SHA = "81053e1bc7e386372ac6ea12f5523e3ea07c3b35d812f43555b1aa407eda5bc6"
 
 
 class FakeRuntime:
@@ -57,15 +57,15 @@ def make_app(max_instruction_chars=1024):
     return create_app(settings, runtime), runtime
 
 
-def test_exact_h3_identity_and_default_guardrail():
-    assert CANDIDATE_ANSWER_RERANK_INSTRUCTION == EXPECTED_H3
+def test_exact_production_instruction_identity_and_default_guardrail():
+    assert CANDIDATE_ANSWER_RERANK_INSTRUCTION == EXPECTED_PRODUCTION_INSTRUCTION
     assert len(CANDIDATE_ANSWER_RERANK_INSTRUCTION) == 524
-    assert hashlib.sha256(CANDIDATE_ANSWER_RERANK_INSTRUCTION.encode()).hexdigest() == EXPECTED_H3_SHA
+    assert hashlib.sha256(CANDIDATE_ANSWER_RERANK_INSTRUCTION.encode()).hexdigest() == EXPECTED_PRODUCTION_INSTRUCTION_SHA
     settings = Settings(api_key="secret", load_models_on_startup=False)
     assert settings.max_instruction_chars == 1024
 
 
-def test_api_accepts_exact_h3_instruction():
+def test_api_accepts_exact_production_instruction():
     app, runtime = make_app()
     with TestClient(app) as client:
         r = client.post(

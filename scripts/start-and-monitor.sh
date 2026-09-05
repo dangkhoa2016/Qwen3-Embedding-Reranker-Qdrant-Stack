@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-RUN_ROOT="${RUN_ROOT:-/kaggle/working/qwen3-dual-4b-run-$(date -u +%Y%m%dT%H%M%SZ)}"
+RUN_ROOT="${RUN_ROOT:-/kaggle/working/qwen3-embedding-reranker-qdrant-stack-run-$(date -u +%Y%m%dT%H%M%SZ)}"
 STARTUP_TIMEOUT_SECONDS="${STARTUP_TIMEOUT_SECONDS:-1200}"
 SERVER_HOST="${SERVER_HOST:-127.0.0.1}"
 SERVER_PORT="${SERVER_PORT:-8000}"

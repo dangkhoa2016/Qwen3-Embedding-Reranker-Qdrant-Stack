@@ -1,18 +1,16 @@
 # Post-release performance roadmap
 > 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](roadmap.vi.md)
 
-Current release scope freezes further CPU tuning. Evidence retained from prior qualification:
+The `1.0.0` release keeps the qualified CPU production-demo configuration stable. Future performance work should be evaluated as new qualification work rather than silently changing the published baseline.
 
-- Q4_K_M same-host K2: qualified.
-- TorchAO INT8: closed; slower on the qualified CPU host.
-- llama.cpp `--parallel 2`: no material K5 benefit on the qualified 2-physical-core host.
+Candidate directions:
 
-Post-release candidates, in order:
-
-1. GPU reranker, qualify K5/K10/K20/K50 where practical.
+1. GPU reranker qualification with larger candidate pools.
 2. GPU embedding + reranker topology.
-3. Larger Qdrant candidate pools and larger rerank depths.
+3. Larger Qdrant retrieval pools and rerank depths where resources permit.
 4. Adaptive Top-K based on retrieval ambiguity/confidence.
-5. Cheap candidate shortlisting before rerank.
+5. Lightweight candidate shortlisting before rerank.
 6. Dense+sparse Qdrant hybrid retrieval.
-7. Separate/distributed inference workers.
+7. Separate or distributed inference workers.
+
+Any promoted change should retain reproducibility, memory-safety evidence, semantic validation, and explicit runtime/data provenance.

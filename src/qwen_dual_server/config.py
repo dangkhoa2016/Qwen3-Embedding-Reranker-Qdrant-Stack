@@ -25,7 +25,7 @@ def _env_float(name: str, default: float) -> float:
 
 
 class Settings(BaseModel):
-    service_name: str = "qwen3-dual-4b-cpu-rest-server"
+    service_name: str = "qwen3-embedding-reranker-qdrant-stack"
     api_key: str | None = None
     allow_insecure_no_auth: bool = False
 
@@ -67,7 +67,7 @@ class Settings(BaseModel):
     rate_limit_requests: int = Field(default=60, ge=1, le=100000)
     rate_limit_window_seconds: int = Field(default=60, ge=1, le=3600)
     trust_proxy_headers: bool = True
-    runtime_lock_path: Path = Path("/tmp/qwen3-dual-4b-cpu-rest-server.lock")
+    runtime_lock_path: Path = Path("/tmp/qwen3-embedding-reranker-qdrant-stack.lock")
 
     def __init__(self, **data):
         env = {
@@ -106,7 +106,7 @@ class Settings(BaseModel):
             "rate_limit_requests": _env_int("RATE_LIMIT_REQUESTS", 60),
             "rate_limit_window_seconds": _env_int("RATE_LIMIT_WINDOW_SECONDS", 60),
             "trust_proxy_headers": _env_bool("TRUST_PROXY_HEADERS", True),
-            "runtime_lock_path": Path(os.getenv("RUNTIME_LOCK_PATH", "/tmp/qwen3-dual-4b-cpu-rest-server.lock")),
+            "runtime_lock_path": Path(os.getenv("RUNTIME_LOCK_PATH", "/tmp/qwen3-embedding-reranker-qdrant-stack.lock")),
         }
         merged = {k: v for k, v in env.items() if v is not None}
         merged.update(data)

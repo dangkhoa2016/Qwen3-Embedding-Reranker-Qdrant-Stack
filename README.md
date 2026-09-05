@@ -8,43 +8,36 @@
 ![Qdrant](https://img.shields.io/badge/Qdrant-1.18.3-red)
 ![CPU qualified](https://img.shields.io/badge/CPU-qualified-success)
 
-
-> **CI badge note:** a green CI badge means the blocking repository gates pass. It does not rewrite the preserved local audit record that contains three known historical environment/Transformers-compatibility failures.
-
-> **Repository:** https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack  
-> **Release line:** `1.0.0` is the first public release identity. Package-index publication is separate from GitHub publication.
-
-`qwen3-embedding-reranker-qdrant-stack` is a production-oriented retrieval stack built around Qwen3-Embedding-4B, Qwen3-Reranker-4B, and Qdrant. It provides a CPU-oriented FastAPI service plus a reproducible 20K-point Qdrant production-demo path qualified on a fresh Kaggle CPU session. It is an embedding/retrieval/reranking project, not a chat-LLM server.
+`qwen3-embedding-reranker-qdrant-stack` is a production-oriented retrieval stack built around Qwen3-Embedding-4B, Qwen3-Reranker-4B, and Qdrant. It provides a CPU-oriented FastAPI service and a reproducible 20K-point bilingual Qdrant production demo. It is an embedding/retrieval/reranking project, not a chat-LLM server.
 
 ## What this project provides
 
-- A bearer-authenticated REST API for Qwen3 embeddings and reranking.
+- Bearer-authenticated REST APIs for Qwen3 embeddings and reranking.
 - `Qwen/Qwen3-Embedding-4B` through Transformers / PyTorch with the qualified CPU FP16 profile.
 - Two reranker backends:
-  - Transformers for the generic source-tree default;
+  - Transformers for the general source-tree default;
   - GGUF `Q4_K_M` through a hardened llama.cpp runtime for the qualified production demo.
-- Strict request-size, queue, concurrency, memory-headroom, and startup/readiness checks.
-- A canonical Qdrant `1.18.3` 20K bilingual snapshot workflow for the qualified hybrid retrieval demo.
-- Reproducibility documentation, evidence/provenance records, operator scripts, and a Kaggle notebook.
+- Request-size, queue, concurrency, memory-headroom, startup, and readiness safeguards.
+- A canonical Qdrant `1.18.3` 20K bilingual snapshot workflow.
+- Reproducibility documentation, operator scripts, provenance records, and an executable Kaggle notebook.
 
-The large model files, GGUF artifact, hardened llama runtime, and Qdrant snapshot are intentionally **not bundled** with the Python package.
+Large model files, the GGUF artifact, llama.cpp runtime, and Qdrant snapshot are intentionally **not bundled** with the Python package.
 
-## Qualified baseline at a glance
+## Production qualification
 
-The accepted Stage-II R10 qualification state is:
+The published `1.0.0` production-demo profile was verified on a fresh Kaggle CPU session:
 
 ```text
-STAGE2_R10_QUALIFICATION=PASS
-STAGE2_R3_TO_R10=CLOSED
-SEMANTIC_3_OF_3=True
-OOM_GATE=PASS
-RUN_ALL_WITHIN_600S=True
-K5_DEFAULT=ACCEPT
-K2_FALLBACK=NOT_JUSTIFIED
-FINAL_RELEASE_DEFAULT=K5_READY
+Production qualification: PASS
+Semantic validation: 3/3 PASS
+cgroup OOM events: 0
+cgroup OOM-kill events: 0
+Run All: 594.964s
+Qualification threshold: 600s
+Retrieval default: K=5
 ```
 
-The measured post-package Run-All time was `594.964s` against a `600s` qualification gate. That narrow result is evidence for the qualified Kaggle setup, **not a general performance guarantee** for arbitrary CPU hosts.
+The timing result is specific to the qualified environment and is **not** a general CPU performance guarantee.
 
 ## Architecture
 
@@ -54,7 +47,7 @@ REST request
   -> Qwen3-Embedding-4B
   -> normalized Float32[2560] embedding
 
-Qualified production-demo path:
+Production-demo retrieval path:
 query
   -> Qwen3-Embedding-4B (Transformers / PyTorch CPU FP16)
   -> Qdrant 1.18.3 / canonical 20K bilingual snapshot
@@ -63,7 +56,7 @@ query
   -> final ranked results
 ```
 
-The qualified production-demo default is `K=5`. K=2 remains an historical fallback branch and is **not justified by the final R10 evidence**.
+The production-demo retrieval depth is `K=5`.
 
 ## Requirements
 
@@ -71,22 +64,22 @@ The qualified production-demo default is `K=5`. K=2 remains an historical fallba
 
 Python `>=3.10` is required.
 
-PyTorch is deliberately **not installed by `requirements.txt` or package metadata**. The qualified Kaggle environment already supplies PyTorch, and automatically replacing that runtime can invalidate the tested environment or consume substantial disk space. Install a PyTorch build appropriate for your CPU/host before running this service outside that environment.
+PyTorch is deliberately **not installed by `requirements.txt` or package metadata**. Install a PyTorch build appropriate for your host before running the service outside an environment that already provides it.
 
 ### External model/runtime assets
 
-A complete local deployment needs the assets required by the selected backend:
+A complete deployment needs the assets required by the selected backend:
 
 1. `Qwen/Qwen3-Embedding-4B` Transformers model files.
-2. For the default Transformers reranker backend, compatible Qwen3 reranker Transformers model files.
-3. For the qualified GGUF production-demo backend, `Qwen3-Reranker-4B.Q4_K_M.gguf` plus the qualified hardened llama runtime.
-4. For the Qdrant production demo, the canonical `knowledge_entities_qwen3_4b_text_v21-20260827T013824Z.snapshot`.
+2. Compatible Qwen3 reranker Transformers files for the Transformers reranker backend.
+3. `Qwen3-Reranker-4B.Q4_K_M.gguf` plus the qualified llama.cpp runtime for the GGUF production-demo backend.
+4. `knowledge_entities_qwen3_4b_text_v21-20260827T013824Z.snapshot` for the Qdrant production demo.
 
-Exact qualified identities are recorded in `STAGE2_R10_QUALIFICATION.md` and `PRODUCTION_DEMO_PROVENANCE.md`.
+Verified runtime/data identities are documented in `PRODUCTION_QUALIFICATION.md` and `PRODUCTION_DEMO_PROVENANCE.md`.
 
 ## Installation
 
-Because this project has not yet been published to a package index, install the local source candidate rather than assuming a registry package exists:
+The project is not currently published to a package index, so install from source:
 
 ```bash
 python -m venv .venv
@@ -101,19 +94,19 @@ For development/test dependencies:
 python -m pip install -r requirements-dev.txt
 ```
 
-Install the correct PyTorch runtime separately as described above.
+Install the appropriate PyTorch runtime separately.
 
 ## Quick start
 
 The checked-in launcher binds to localhost by default and refuses to start without authentication unless insecure no-auth mode is explicitly enabled.
 
-1. Copy and edit the environment template:
+1. Copy the environment template:
 
 ```bash
 cp .env.example .env
 ```
 
-2. At minimum, set a strong API key and valid model paths for the backend you are using:
+2. Set a strong API key and valid model paths:
 
 ```text
 DUAL_API_KEY=<strong-random-secret>
@@ -121,12 +114,12 @@ EMBEDDING_MODEL_PATH=/absolute/path/to/Qwen3-Embedding-4B
 RERANKER_MODEL_PATH=/absolute/path/to/Qwen3-Reranker-4B
 ```
 
-For the GGUF reranker backend, configure instead:
+For the GGUF reranker backend:
 
 ```text
 RERANKER_BACKEND=llama_cpp
 RERANKER_GGUF_PATH=/absolute/path/to/Qwen3-Reranker-4B.Q4_K_M.gguf
-LLAMA_SERVER_BIN=/absolute/path/to/qualified/llama-server-patched
+LLAMA_SERVER_BIN=/absolute/path/to/qualified/llama-server
 ```
 
 3. Export the environment and start the service:
@@ -145,7 +138,7 @@ curl -s http://127.0.0.1:8000/health
 curl -s http://127.0.0.1:8000/ready
 ```
 
-`/ready` returns HTTP `503` until the runtime reports ready.
+`/ready` returns HTTP `503` until the runtime is ready.
 
 ## API overview
 
@@ -183,17 +176,13 @@ curl -s http://127.0.0.1:8000/v1/rerank \
   -d '{"query":"capital of Japan","documents":["Tokyo","Osaka"],"return_documents":true}'
 ```
 
-Request instructions are optional and bounded by:
+Optional request instructions are bounded by:
 
 ```text
 MAX_INSTRUCTION_CHARS=1024
 ```
 
-Other request/concurrency limits are documented in `.env.example` and enforced by the application settings.
-
 ## Safe CPU defaults
-
-The publication candidate preserves the qualified conservative profile:
 
 ```text
 MODEL_DTYPE=float16
@@ -206,22 +195,21 @@ ALLOW_REMOTE_MODEL_DOWNLOAD=0
 UVICORN_WORKERS=1
 ```
 
-The production-demo profile used two CPU threads during qualification. Do not treat larger worker counts or parallel inference as validated simply because the host has more cores.
+The qualified production-demo profile used two CPU threads. Larger worker counts or parallel inference require independent validation.
 
 ## Qualified Qdrant production demo
 
-The production demo restores the canonical 20K snapshot; it does not rebuild or re-embed the collection.
+The demo restores the canonical 20K snapshot; it does not rebuild or re-embed the collection.
 
 Start with:
 
-- `README_PRODUCTION_DEMO.md` — English production-demo guide;
-- `README_PRODUCTION_DEMO.vi.md` — Vietnamese production-demo guide;
+- `README_PRODUCTION_DEMO.md` — production-demo guide;
 - `guide-production-demo.md` — concise Run-All instructions;
 - `notebooks/qwen3_embedding_reranker_qdrant_kaggle_demo.ipynb` — executable notebook;
-- `STAGE2_R10_QUALIFICATION.md` — accepted qualification summary;
-- `PRODUCTION_DEMO_PROVENANCE.md` — source/runtime/artifact provenance.
+- `PRODUCTION_QUALIFICATION.md` — public qualification summary;
+- `PRODUCTION_DEMO_PROVENANCE.md` — runtime/data/artifact provenance.
 
-Qualified Qdrant contract:
+Verified Qdrant contract:
 
 ```text
 Qdrant version: 1.18.3
@@ -232,24 +220,9 @@ Distance: cosine
 Retrieval default: K=5
 ```
 
-## Authentication and deployment safety
-
-Authentication is fail-closed by default:
-
-```text
-DUAL_API_KEY=<required unless explicitly disabled>
-ALLOW_INSECURE_NO_AUTH=0
-```
-
-`ALLOW_INSECURE_NO_AUTH=1` is intended only for controlled localhost testing. The supplied launcher binds to `127.0.0.1` by default and does not configure public TLS termination.
-
-`TRUST_PROXY_HEADERS=1` means client rate-limit identity may use `X-Forwarded-For`. Keep that setting only when requests pass through a trusted reverse proxy that sanitizes forwarding headers; otherwise set `TRUST_PROXY_HEADERS=0`.
-
-See `SECURITY.md` before exposing the service outside a trusted local environment.
-
 ## Development and verification
 
-Targeted/static checks:
+Recommended local checks:
 
 ```bash
 PYTHONPATH=src pytest -q
@@ -257,55 +230,30 @@ python -m compileall -q src scripts
 bash -n scripts/*.sh
 ```
 
-The preserved pre-hardening publication-audit baseline was:
-
-```text
-111 passed, 3 failed, 1 skipped
-KNOWN_BASELINE_FAILURES=3
-```
-
-The preserved expanded local audit snapshot taken during bilingual/governance/CI hardening recorded:
-
-```text
-HISTORICAL_LOCAL_EXPANDED_SUITE=116 passed, 3 failed, 1 skipped
-KNOWN_HISTORICAL_FAILURES=3
-NEW_REGRESSION_FAILURES=0
-FAILURE_SET_MATCHES_PRE_HARDENING_BASELINE=PASS
-```
-
-Those numbers are historical audit evidence, not the live blocking-CI count. The current release-candidate blocking gate records:
-
-```text
-BLOCKING_CI_SUITE=119 passed, 1 skipped, 3 deselected
-HISTORICAL_COMPATIBILITY_PROBES=executed separately
-```
-
-The three engine-contract nodes were the complete failure set in the preserved historical local audit. CI keeps them as separate compatibility probes; results under the current dependency environment do not rewrite that historical record. Do **not** summarize the repository as “all tests pass”; the precise release-facing claim is that the blocking CI gates pass.
+GitHub CI validates Python 3.10 and 3.12, runs the blocking regression suite, executes the three compatibility probes separately, and verifies wheel/sdist construction.
 
 ## Security
 
-Please read `SECURITY.md` before deployment or vulnerability reporting. Security-sensitive reports should be sent privately rather than posted as public issues.
+Read `SECURITY.md` before deployment or vulnerability reporting. Security-sensitive reports must be sent privately rather than posted as public issues.
 
 ## Contributing
 
-Contribution and verification expectations are in `CONTRIBUTING.md`. In particular, the Stage-II qualified semantic files have an explicit requalification boundary: publication-hygiene changes must not silently change them.
-
-GitHub issue and pull-request templates are included under `.github/` for this repository.
+Contribution and verification expectations are documented in `CONTRIBUTING.md`. Changes to qualification-sensitive runtime files require explicit review and fresh evidence when behavior changes.
 
 ## Known limitations
 
 - The qualified baseline is CPU- and Kaggle-specific; it is not a universal throughput or latency guarantee.
-- Loading two 4B-class models is memory intensive. The runtime uses memory-headroom and OOM gates, but operators still need adequate host RAM and swap policy.
-- The package does not bundle PyTorch, model weights, GGUF files, Qdrant data, or the hardened llama runtime.
+- Loading two 4B-class models is memory intensive; operators need adequate host RAM and appropriate swap policy.
+- The package does not bundle PyTorch, model weights, GGUF files, Qdrant data, or the llama.cpp runtime.
 - The launcher is single-worker by design for the qualified CPU memory model.
-- Built-in bearer authentication and fixed-window rate limiting are not substitutes for network isolation, TLS, reverse-proxy hardening, or broader abuse protection when internet-facing.
-- Source publication, the `v1.0.0` GitHub tag/Release channel, and package-index/PyPI publication are separate release channels and are verified independently.
+- Built-in bearer authentication and fixed-window rate limiting do not replace network isolation, TLS, reverse-proxy hardening, or broader abuse protection for internet-facing deployments.
+- GitHub source/release publication and package-index publication are separate release channels.
 
 ## Reproducibility and provenance
 
-Qualification evidence and provenance are documented in `PRODUCTION_DEMO_PROVENANCE.md`, `STAGE2_R10_QUALIFICATION.md`, `PRE_PUBLISH_NOTES.md`, and `VERIFICATION_SUMMARY.txt`.
+Qualification results are documented in `PRODUCTION_QUALIFICATION.md`; runtime and artifact identities are documented in `PRODUCTION_DEMO_PROVENANCE.md`.
 
-Changes that affect qualified behavior require fresh qualification evidence; contributor guidance is documented in `CONTRIBUTING.md`.
+Changes that affect qualified behavior require fresh qualification evidence.
 
 ## License
 

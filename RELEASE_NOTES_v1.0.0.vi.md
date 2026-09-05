@@ -2,11 +2,8 @@
 > 🌐 Language / Ngôn ngữ: [English](RELEASE_NOTES_v1.0.0.md) | **Tiếng Việt**
 
 **Release identity: `qwen3-embedding-reranker-qdrant-stack` `1.0.0`.**
-Repository: https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack. Việc publish source trên GitHub, publish GitHub Release theo tag và publish lên package index là các kênh phát hành riêng, được kiểm chứng độc lập.
 
-## First public release identity
-
-`1.0.0` là public version đầu tiên đã được phê duyệt. Internal qualification labels như `v0.2.3c` và temporary local packaging label `0.2.3rc1` chưa từng là public releases.
+`1.0.0` là phiên bản phát hành công khai đầu tiên của dự án này.
 
 ```text
 Package: qwen3-embedding-reranker-qdrant-stack
@@ -18,72 +15,43 @@ Python: >=3.10
 
 ## Điểm nổi bật
 
-- CPU-oriented FastAPI service cho Qwen3 embedding và reranking workloads.
-- Qwen3-Embedding-4B qualified trên Transformers / PyTorch CPU FP16 path.
-- Qwen3-Reranker-4B `Q4_K_M` GGUF production-demo path qua hardened llama.cpp runtime.
-- Qdrant `1.18.3` canonical 20K bilingual snapshot workflow.
-- Bearer-authenticated `/v1/*` API với fail-closed startup/authentication và conservative CPU concurrency limits.
-- Kaggle production-demo notebook có thể tái hiện, provenance records và operator scripts.
+- FastAPI service theo hướng CPU cho Qwen3 embedding và reranking.
+- Qwen3-Embedding-4B trên Transformers / PyTorch CPU FP16 path đã được kiểm chứng.
+- Qwen3-Reranker-4B `Q4_K_M` GGUF production-demo path qua llama.cpp runtime đã được harden.
+- Qdrant `1.18.3` với canonical snapshot song ngữ 20K point.
+- `/v1/*` API có bearer authentication, fail-closed startup/authentication và giới hạn CPU concurrency thận trọng.
+- Kaggle production-demo notebook có thể tái hiện, operator scripts, qualification summary và provenance records.
 
-## Qualified production baseline
+## Kiểm chứng production
 
-- Stage-II R10 fresh Kaggle qualification: PASS.
-- Stage-II corrective chain R3→R10: CLOSED.
-- Ba trên ba semantic cases: PASS.
-- cgroup OOM và OOM-kill deltas: zero.
-- Post-package Run All: `594.964s` trong gate `600s`.
-- `K5_DEFAULT=ACCEPT`.
-- `K2_FALLBACK=NOT_JUSTIFIED`.
-- `FINAL_RELEASE_DEFAULT=K5_READY`.
+- Fresh Kaggle CPU qualification: **PASS**.
+- Semantic validation: **3/3 PASS**.
+- cgroup OOM events: **0**.
+- cgroup OOM-kill events: **0**.
+- End-to-end Run All: `594.964s`, nằm trong ngưỡng kiểm chứng `600s`.
+- Độ sâu truy hồi mặc định: `K=5`.
 
-Timing result chỉ áp dụng qualified environment và không phải general CPU performance guarantee.
+Kết quả thời gian chỉ áp dụng cho môi trường đã được kiểm chứng và không phải cam kết hiệu năng chung cho mọi CPU.
 
-## Packaging và publication hygiene
+## Xác minh
 
-Pre-release work chuẩn bị:
+GitHub CI kiểm tra Python 3.10 và Python 3.12, chạy toàn bộ regression suite ở chế độ blocking và xác minh wheel/sdist.
 
-- package/runtime identity `1.0.0`;
-- MIT SPDX package metadata và shipped `LICENSE` file;
-- author metadata;
-- README long-description/package metadata;
-- public-facing keywords/classifiers với real GitHub project URLs;
-- `MAX_INSTRUCTION_CHARS=1024` trong example configuration;
-- source manifest/build hygiene;
-- `SECURITY.md`/`.vi.md` và `CONTRIBUTING.md`/`.vi.md`;
-- bilingual `.github` issue/pull-request templates, community files và CI workflow.
+## Packaging và deployment
 
-Qualified production semantic files vẫn được bảo vệ bằng byte-identity checks trong publication-hygiene work.
+- Package/runtime identity là `1.0.0`.
+- Package metadata MIT theo SPDX/PEP 639 và file `LICENSE` được bao gồm.
+- `MAX_INSTRUCTION_CHARS=1024` được ghi trong example configuration.
+- Model weights, GGUF files, llama.cpp runtime files, PyTorch và Qdrant snapshot là external deployment inputs và không được bundle trong Python package.
 
-## External artifacts
-
-Large model weights, GGUF reranker artifact, hardened llama runtime, PyTorch runtime và Qdrant snapshot không bundle trong Python package. Qualified identities và reproduction requirements nằm trong `STAGE2_R10_QUALIFICATION.vi.md`/`.md` và `PRODUCTION_DEMO_PROVENANCE.vi.md`/`.md`.
+Kết quả qualification và artifact identities đã xác minh nằm trong `PRODUCTION_QUALIFICATION.vi.md` và `PRODUCTION_DEMO_PROVENANCE.vi.md`.
 
 ## Bảo mật và đóng góp
 
-- Vulnerability reporting và deployment-security guidance: `SECURITY.vi.md`/`SECURITY.md`.
-- Contribution, testing và requalification-boundary guidance: `CONTRIBUTING.vi.md`/`CONTRIBUTING.md`.
+- Hướng dẫn security và vulnerability reporting: `SECURITY.vi.md`.
+- Hướng dẫn contribution và verification: `CONTRIBUTING.vi.md`.
 
 Security vulnerabilities phải được báo riêng thay vì public issue.
-
-## Known test baseline
-
-Pre-hardening audit baseline được giữ lại là `111 passed, 3 failed, 1 skipped`. Một snapshot local audit sau bilingual/governance/CI hardening được bảo tồn ghi nhận:
-
-```text
-HISTORICAL_LOCAL_EXPANDED_SUITE=116 passed, 3 failed, 1 skipped
-KNOWN_HISTORICAL_FAILURES=3
-NEW_REGRESSION_FAILURES=0
-FAILURE_SET_MATCHES_PRE_HARDENING_BASELINE=PASS
-```
-
-Các con số trên là historical audit evidence, không phải live blocking-CI count. Release-candidate blocking gate ghi nhận:
-
-```text
-BLOCKING_CI_SUITE=119 passed, 1 skipped, 3 deselected
-HISTORICAL_COMPATIBILITY_PROBES=executed separately
-```
-
-Ba engine-contract node là toàn bộ failure set trong historical local audit đã được bảo tồn. CI chạy chúng riêng như compatibility probes, vì vậy kết quả dưới dependency environment hiện tại không viết lại historical record đó. Claim release chính xác là các blocking CI gate pass; release note này không claim một test suite luôn zero-failure trên mọi dependency environment.
 
 ## Kênh phát hành
 

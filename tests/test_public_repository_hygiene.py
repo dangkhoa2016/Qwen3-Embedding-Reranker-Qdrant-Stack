@@ -7,301 +7,215 @@ except ModuleNotFoundError:  # Python 3.10
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_python_310_toml_test_harness_declares_backport_and_fallback():
-    dev = (ROOT / "requirements-dev.txt").read_text(encoding="utf-8")
-    assert 'tomli>=2; python_version < "3.11"' in dev
-    for path in ["tests/test_public_repository_hygiene.py", "tests/test_release_identity.py"]:
-        text = (ROOT / path).read_text(encoding="utf-8")
-        assert "except ModuleNotFoundError:" in text
-        assert "import tomli as tomllib" in text
-
-
 def read(path: str) -> str:
     target = ROOT / path
     assert target.is_file(), f"missing public repository file: {path}"
     return target.read_text(encoding="utf-8")
 
 
-def test_public_package_metadata_is_pep639_ready_and_url_safe():
-    data = tomllib.loads(read("pyproject.toml"))
-    project = data["project"]
-    assert data["build-system"]["requires"][0].startswith("setuptools>=77")
+def test_public_package_metadata_is_current():
+    project = tomllib.loads(read("pyproject.toml"))["project"]
     assert project["name"] == "qwen3-embedding-reranker-qdrant-stack"
     assert project["version"] == "1.0.0"
-    assert project["readme"] == "README.md"
+    assert project["authors"] == [{"name": "Đăng Khoa", "email": "i.am@dangkhoa.dev"}]
     assert project["license"] == "MIT"
     assert project["license-files"] == ["LICENSE"]
-    assert "License :: OSI Approved :: MIT License" not in project.get("classifiers", [])
-    assert "Programming Language :: Python :: 3" in project["classifiers"]
-    assert "Topic :: Scientific/Engineering :: Artificial Intelligence" in project["classifiers"]
-    assert {"qwen3-embedding", "qwen3-reranker", "qdrant", "text-embeddings", "reranking", "semantic-search", "vector-search", "information-retrieval", "retrieval", "cpu-inference", "gguf"}.issubset(set(project["keywords"]))
-    assert project["urls"] == {
-        "Homepage": "https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack",
-        "Repository": "https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack",
-        "Issues": "https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack/issues",
-    }
+    assert project["readme"] == "README.md"
 
 
-def test_readme_is_a_complete_public_landing_page():
-    text = read("README.md")
+def test_public_landing_and_governance_docs_are_complete():
+    readme = read("README.md")
     for required in [
-        "# Qwen3-Embedding-Reranker-Qdrant-Stack",
-        "## What this project provides",
-        "## Installation",
-        "## Quick start",
-        "## API overview",
-        "## Qualified Qdrant production demo",
-        "## Security",
-        "## Contributing",
-        "## Known limitations",
-        "SECURITY.md",
-        "CONTRIBUTING.md",
-        "K5_DEFAULT=ACCEPT",
-        "K2_FALLBACK=NOT_JUSTIFIED",
-        "MAX_INSTRUCTION_CHARS=1024",
+        "## What this project provides", "## Production qualification",
+        "## Installation", "## Quick start", "## API overview",
+        "## Qualified Qdrant production demo", "## Security",
+        "## Contributing", "## Known limitations",
+        "PRODUCTION_QUALIFICATION.md", "PRODUCTION_DEMO_PROVENANCE.md",
+        "Retrieval default: K=5", "MAX_INSTRUCTION_CHARS=1024",
     ]:
-        assert required in text, required
-    assert "https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack" in text
-    assert "The first-public-release identity is:" not in text
+        assert required in readme, required
 
+    security = read("SECURITY.md")
+    assert "Do not open a public issue" in security
+    assert "i.am@dangkhoa.dev" in security
+    assert "ALLOW_INSECURE_NO_AUTH" in security
+    assert "TRUST_PROXY_HEADERS" in security
 
-def test_security_policy_is_private_report_first_and_repository_aware():
-    text = read("SECURITY.md")
-    lower = text.lower()
-    assert "i.am@dangkhoa.dev" in text
-    assert "do not open a public issue" in lower
-    assert "1.0.0" in text
-    assert "github.com/dangkhoa2016/qwen3-embedding-reranker-qdrant-stack" in lower
-    assert "ALLOW_INSECURE_NO_AUTH" in text
-    assert "TRUST_PROXY_HEADERS" in text
-
-
-def test_contributing_policy_preserves_qualification_boundary():
-    text = read("CONTRIBUTING.md")
+    contributing = read("CONTRIBUTING.md")
     for required in [
-        "111 passed, 3 failed, 1 skipped",
-        "116 passed, 3 failed, 1 skipped",
-        "NEW_REGRESSION_FAILURES=0",
+        "Retrieval default: K=5", "MAX_INSTRUCTION_CHARS=1024",
         "src/qwen_dual_server/config.py",
         "src/qwen_dual_server/gguf_reranker_engine.py",
         "src/qwen_dual_server/production_demo.py",
-        "tests/test_gguf_reranker_engine.py",
-        "tests/test_production_demo.py",
-        "SECURITY.md",
     ]:
-        assert required in text, required
+        assert required in contributing, required
 
 
-def test_github_templates_and_community_files_are_complete_and_bilingual():
-    required = [
-        ".github/ISSUE_TEMPLATE/bug_report.md",
-        ".github/ISSUE_TEMPLATE/bug_report.vi.md",
-        ".github/ISSUE_TEMPLATE/documentation.md",
-        ".github/ISSUE_TEMPLATE/documentation.vi.md",
-        ".github/ISSUE_TEMPLATE/feature_request.md",
-        ".github/ISSUE_TEMPLATE/feature_request.vi.md",
-        ".github/PULL_REQUEST_TEMPLATE.md",
-        ".github/PULL_REQUEST_TEMPLATE.vi.md",
-        ".github/CODE_OF_CONDUCT.md",
-        ".github/CODE_OF_CONDUCT.vi.md",
-        ".github/SUPPORT.md",
-        ".github/SUPPORT.vi.md",
-        ".github/CODEOWNERS",
-        ".github/dependabot.yml",
-        ".github/workflows/ci.yml",
+def test_current_public_tree_excludes_historical_development_docs():
+    removed = [
+        "BASELINE_PROVENANCE.txt",
+        "OPENCODE_QWEN3_DUAL_4B_CPU_SERVER_KAGGLE_RUNBOOK_2026-08-30.md",
+        "OPENCODE_QWEN3_DUAL_4B_CPU_SERVER_KAGGLE_RUNBOOK_2026-08-30.vi.md",
+        "PRE" + "_PUBLISH_NOTES.md", "PRE" + "_PUBLISH_NOTES.vi.md",
+        "README_INT8_EXPERIMENT.md", "README_INT8_EXPERIMENT.vi.md",
+        "STAGE2" + "_R10_QUALIFICATION.md", "STAGE2" + "_R10_QUALIFICATION.vi.md",
+        "docs/hybrid-gguf", "docs/superpowers",
     ]
-    for path in required:
-        assert (ROOT / path).is_file(), path
-    assert "name: Bug report" in read(".github/ISSUE_TEMPLATE/bug_report.md")
-    assert "name: Documentation" in read(".github/ISSUE_TEMPLATE/documentation.md")
-    assert "name: Feature request" in read(".github/ISSUE_TEMPLATE/feature_request.md")
-    assert "blank_issues_enabled: true" in read(".github/ISSUE_TEMPLATE/config.yml")
-    assert "protected semantic" in read(".github/PULL_REQUEST_TEMPLATE.md").lower()
-    assert "@dangkhoa2016" in read(".github/CODEOWNERS")
-    dependabot = read(".github/dependabot.yml")
-    assert 'package-ecosystem: "pip"' in dependabot
-    assert 'package-ecosystem: "github-actions"' in dependabot
+    for rel in removed:
+        assert not (ROOT / rel).exists(), rel
 
 
-def test_every_canonical_markdown_file_has_a_vietnamese_companion():
-    canonical = sorted(
-        p for p in ROOT.rglob("*.md")
-        if ".git" not in p.parts and ".pytest_cache" not in p.parts and not p.name.endswith(".vi.md")
-    )
-    assert canonical, "no canonical markdown files found"
-    missing = []
-    for path in canonical:
-        companion = path.with_name(path.name[:-3] + ".vi.md")
-        if not companion.is_file():
-            missing.append(str(path.relative_to(ROOT)))
-    assert not missing, "missing Vietnamese companions: " + ", ".join(missing)
+def test_current_public_docs_do_not_expose_internal_development_labels():
+    banned = [
+        "v0" + ".2.3c", "0.2.3" + "rc1", "Stage" + "-II",
+        "STAGE2" + "_R10", "STAGE2" + "_R3_TO_R10", "R3" + "→R10",
+        "K5" + "_DEFAULT=ACCEPT", "K2" + "_FALLBACK=NOT_JUSTIFIED",
+        "FINAL" + "_RELEASE_DEFAULT=K5_READY",
+        "qwen3" + "-dual-4b",
+        "DUAL" + "_4B_TRANSFORMERS_TORCHAO_INT8",
+        "Experimental" + " copy only",
+        "FALLBACK" + "_TO_K2",
+    ]
+    paths = list(ROOT.rglob("*.md")) + [ROOT / "VERIFICATION_SUMMARY.txt"]
+    for path in paths:
+        if ".git" in path.parts or ".pytest_cache" in path.parts:
+            continue
+        text = path.read_text(encoding="utf-8")
+        for value in banned:
+            assert value not in text, f"{path.relative_to(ROOT)}: {value}"
 
 
+def test_public_qualification_and_provenance_are_outcome_based():
+    qualification = read("PRODUCTION_QUALIFICATION.md")
+    for required in [
+        "Production qualification: PASS", "Retrieval default: K=5",
+        "Semantic validation: 3/3 PASS", "Verified Run All: 594.964s",
+        "Qdrant version=1.18.3",
+    ]:
+        assert required in qualification, required
 
-def test_every_bilingual_markdown_pair_uses_standard_language_switch_below_h1():
+    provenance = read("PRODUCTION_DEMO_PROVENANCE.md")
+    assert "Version=1.0.0" in provenance
+    assert "snapshot SHA256=71f12fe14ef51966069347290ad15302d389e488d7904dab6cf0cf190f43064f" in provenance
+
+
+def test_every_markdown_file_has_a_vietnamese_companion_and_standard_switch():
     canonical = sorted(
         p for p in ROOT.rglob("*.md")
         if ".git" not in p.parts
         and ".pytest_cache" not in p.parts
         and not p.name.endswith(".vi.md")
-        and p.with_name(p.name[:-3] + ".vi.md").is_file()
     )
-    assert len(canonical) == 27
+    assert canonical
     for path in canonical:
         companion = path.with_name(path.name[:-3] + ".vi.md")
-        en_lines = path.read_text(encoding="utf-8").splitlines()
-        vi_lines = companion.read_text(encoding="utf-8").splitlines()
-        en_h1 = next(i for i, line in enumerate(en_lines) if line.startswith("# "))
-        vi_h1 = next(i for i, line in enumerate(vi_lines) if line.startswith("# "))
-        expected_en = f"> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt]({companion.name})"
-        expected_vi = f"> 🌐 Language / Ngôn ngữ: [English]({path.name}) | **Tiếng Việt**"
-        assert en_lines[en_h1 + 1] == expected_en, path
-        assert vi_lines[vi_h1 + 1] == expected_vi, companion
-        assert [line for line in en_lines if "Language / Ngôn ngữ:" in line] == [expected_en]
-        assert [line for line in vi_lines if "Language / Ngôn ngữ:" in line] == [expected_vi]
-        assert not any(line.startswith("> English |") for line in en_lines)
-        assert not any(
-            line.startswith("> [English](")
-            and "Tiếng Việt" in line
-            and "Language / Ngôn ngữ:" not in line
-            for line in vi_lines
-        )
+        assert companion.is_file(), path
+        en = path.read_text(encoding="utf-8").splitlines()
+        vi = companion.read_text(encoding="utf-8").splitlines()
+        en_h1 = next(i for i, line in enumerate(en) if line.startswith("# "))
+        vi_h1 = next(i for i, line in enumerate(vi) if line.startswith("# "))
+        assert en[en_h1 + 1] == f"> 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt]({companion.name})"
+        assert vi[vi_h1 + 1] == f"> 🌐 Language / Ngôn ngữ: [English]({path.name}) | **Tiếng Việt**"
 
 
-def test_readme_does_not_duplicate_first_public_release_identity_block():
-    assert "The first-public-release identity is:" not in read("README.md")
-    assert "The prepared first-public-release identity is:" not in read("README.md")
-    assert "Public release identity đầu tiên là:" not in read("README.vi.md")
+def test_github_community_and_ci_files_are_current():
+    for path in [
+        ".github/PULL_REQUEST_TEMPLATE.md", ".github/PULL_REQUEST_TEMPLATE.vi.md",
+        ".github/CODE_OF_CONDUCT.md", ".github/CODE_OF_CONDUCT.vi.md",
+        ".github/SUPPORT.md", ".github/SUPPORT.vi.md",
+        ".github/CODEOWNERS", ".github/dependabot.yml", ".github/workflows/ci.yml",
+    ]:
+        assert (ROOT / path).is_file(), path
 
-
-
-def test_public_readmes_do_not_expose_internal_qualification_identifiers():
-    banned = [
-        "v0.2.3c",
-        "0.2.3rc1",
-        "qwen_dual_server",
-        "qwen3-dual-4b-cpu-rest-server",
-    ]
-    for path in ["README.md", "README.vi.md"]:
-        text = read(path)
-        for identifier in banned:
-            assert identifier not in text, f"{path}: {identifier}"
-    assert "Qualification evidence and provenance are documented in" in read("README.md")
-    assert "Thông tin về quá trình kiểm chứng và nguồn gốc được ghi trong" in read("README.vi.md")
-
-
-def test_readme_badges_and_language_navigation_are_symmetric():
-    en = read("README.md")
-    vi = read("README.vi.md")
-    badge_fragments = [
-        "actions/workflows/ci.yml/badge.svg",
-        "python-%3E%3D3.10",
-        "license-MIT",
-        "version-1.0.0",
-        "Qdrant-1.18.3",
-        "CPU-qualified",
-    ]
-    for fragment in badge_fragments:
-        assert fragment in en, fragment
-        assert fragment in vi, fragment
-    assert "README.vi.md" in en
-    assert "README.md" in vi
-    assert "CI badge" in en
-    assert "badge CI" in vi
-
-
-def test_ci_workflow_uses_current_action_majors_and_baseline_isolation():
     ci = read(".github/workflows/ci.yml")
-    assert "actions/checkout@v7" in ci
-    assert "actions/setup-python@v7" in ci
-    assert "actions/upload-artifact@v7" in ci
-    assert "actions/cache@" not in ci
-    assert "permissions:" in ci and "contents: read" in ci
+    assert "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7" in ci
+    assert "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7" in ci
+    assert "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7" in ci
     assert 'python-version: ["3.10", "3.12"]' in ci
-    for nodeid in [
-        "tests/test_engine_contracts.py::test_embedding_loader_is_cpu_fp16_low_memory_and_output_is_fp32",
-        "tests/test_engine_contracts.py::test_reranker_uses_yes_no_protocol_and_sorts_results",
-        "tests/test_engine_contracts.py::test_current_transformers_prefers_dtype_keyword",
-    ]:
-        assert nodeid in ci
-    assert "continue-on-error: true" in ci
+    assert "continue-on-error: true" not in ci
+    assert "--deselect=" not in ci
+    assert "- name: Run full regression suite" in ci
+    assert "run: pytest -q" in ci
+    assert "- name: Upload canonical tag distributions" in ci
+    assert "if: startsWith(github.ref, 'refs/tags/v')" in ci
     assert "python -m build" in ci
+    issue_config = read(".github/ISSUE_TEMPLATE/config.yml")
+    assert "blank_issues_enabled: false" in issue_config
+    assert read(".github/CODEOWNERS").startswith("# Default repository owner.")
 
 
-def test_release_facing_docs_are_publication_state_neutral_and_prepublish_notes_remain_historical():
-    release_en = read("RELEASE_NOTES_v1.0.0.md")
-    release_vi = read("RELEASE_NOTES_v1.0.0.vi.md")
-
+def test_release_notes_are_current_and_bilingual():
+    en = read("RELEASE_NOTES_v1.0.0.md")
+    vi = read("RELEASE_NOTES_v1.0.0.vi.md")
     for required in [
-        "SECURITY.md",
-        "CONTRIBUTING.md",
-        "## Publication channels",
-        "Release identity: v1.0.0",
-        "Package index / PyPI: separate publication channel",
+        "## Production qualification", "## Verification",
+        "## Publication channels", "Release identity: v1.0.0",
     ]:
-        assert required in release_en, required
-
-    for path, banned in {
-        "README.md": [
-            "The `v1.0.0` tag and GitHub Release are not created yet",
-        ],
-        "README.vi.md": [
-            "Tag `v1.0.0` và GitHub Release chưa được tạo",
-        ],
-        "RELEASE_NOTES_v1.0.0.md": [
-            "first-release tag and GitHub Release pending",
-            "no `v1.0.0` tag or GitHub Release has been created yet",
-            "Tag `v1.0.0`: not created yet",
-            "GitHub Release: not created yet",
-            "Package index / PyPI: not published",
-        ],
-        "RELEASE_NOTES_v1.0.0.vi.md": [
-            "first-release tag và GitHub Release đang chờ",
-            "chưa tạo tag `v1.0.0` hoặc GitHub Release",
-            "Tag `v1.0.0`: not created yet",
-            "GitHub Release: not created yet",
-            "Package index / PyPI: not published",
-        ],
-    }.items():
-        text = read(path)
-        for phrase in banned:
-            assert phrase not in text, f"{path}: stale publication-state wording: {phrase}"
-
-    assert "## Kênh phát hành" in release_vi
-    assert "Release identity: v1.0.0" in release_vi
-    assert "Package index / PyPI: kênh publication riêng" in release_vi
-
-    for path in ["README.md", "README.vi.md", "RELEASE_NOTES_v1.0.0.md", "RELEASE_NOTES_v1.0.0.vi.md"]:
-        evidence = read(path)
-        assert "HISTORICAL_LOCAL_EXPANDED_SUITE=116 passed, 3 failed, 1 skipped" in evidence
-        assert "BLOCKING_CI_SUITE=119 passed, 1 skipped, 3 deselected" in evidence
-        assert "HISTORICAL_COMPATIBILITY_PROBES=executed separately" in evidence
-        assert "BLOCKING_CI_SUITE=116 passed, 1 skipped, 3 deselected" not in evidence
-
-    pre_en = read("PRE_PUBLISH_NOTES.md")
-    pre_vi = read("PRE_PUBLISH_NOTES.vi.md")
-    for notes in [pre_en, pre_vi]:
-        assert "TAG=NONE" in notes
-        assert "RELEASE=NONE" in notes
-    assert "pre-tag publication checkpoint" in pre_en
-    assert "pre-tag publication checkpoint" in pre_vi
-
-
-def test_readme_and_prepublish_notes_no_longer_claim_main_is_local_only():
-    readme = read("README.md")
-    notes = read("PRE_PUBLISH_NOTES.md")
-    assert "current source remains a local pre-publication candidate" not in readme.lower()
-    assert "PUBLICATION_STATE=GITHUB_SOURCE_PUBLISHED_ON_MAIN" in notes
-    assert "MAIN_SOURCE=PUBLISHED" in notes
-    assert "TAG=NONE" in notes
-    assert "RELEASE=NONE" in notes
+        assert required in en, required
+    assert "## Kiểm chứng production" in vi
+    assert "## Xác minh" in vi
+    assert "## Kênh phát hành" in vi
+    for text in [en, vi, read("README.md"), read("README.vi.md")]:
+        assert "TAG=NONE" not in text
+        assert "RELEASE=NONE" not in text
+        assert "pre-tag" not in text.lower()
 
 
 def test_sdist_manifest_includes_bilingual_core_governance_docs():
-    text = read("MANIFEST.in")
+    manifest = read("MANIFEST.in")
     for path in [
-        "SECURITY.md", "SECURITY.vi.md",
+        "README.vi.md", "SECURITY.md", "SECURITY.vi.md",
         "CONTRIBUTING.md", "CONTRIBUTING.vi.md",
-        "README.vi.md",
     ]:
-        assert f"include {path}" in text
+        assert f"include {path}" in manifest
+
+
+def test_tracked_paths_and_utf8_text_are_free_of_retired_internal_labels():
+    import subprocess
+
+    retired_path_tokens = [
+        "v0" + "23",
+        "v0" + "23c",
+        "pre" + "_publish",
+        "pre" + "-publish",
+        "stage2" + "_r10",
+        "qwen3" + "-dual-4b",
+    ]
+    retired_content_tokens = [
+        "v0" + ".1.0",
+        "v0" + ".1.1",
+        "v0" + ".2.3",
+        "v0" + "23",
+        "v0" + "23c",
+        "Stage" + "-II",
+        "STAGE2" + "_R10",
+        "STAGE2" + "_R3_TO_R10",
+        "R3" + "→R10",
+        "EXPECTED" + "_H3",
+        "NATIVE" + "_INSTRUCTION_RED",
+        "K5" + "_DEFAULT=ACCEPT",
+        "K2" + "_FALLBACK=NOT_JUSTIFIED",
+        "FINAL" + "_RELEASE_DEFAULT=K5_READY",
+        "qwen3" + "-dual-4b",
+        "DUAL" + "_4B_TRANSFORMERS_TORCHAO_INT8",
+        "Experimental" + " copy only",
+        "FALLBACK" + "_TO_K2",
+    ]
+
+    tracked = subprocess.check_output(
+        ["git", "ls-files", "-z"], cwd=ROOT
+    ).decode("utf-8").split("\0")
+    for rel in filter(None, tracked):
+        lowered = rel.lower()
+        for token in retired_path_tokens:
+            assert token not in lowered, f"retired path token {token!r}: {rel}"
+
+        data = (ROOT / rel).read_bytes()
+        if b"\0" in data[:8192]:
+            continue
+        try:
+            text = data.decode("utf-8")
+        except UnicodeDecodeError:
+            continue
+        for token in retired_content_tokens:
+            assert token not in text, f"retired content token {token!r}: {rel}"

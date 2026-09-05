@@ -11,7 +11,7 @@ esac
 
 export APP="$ROOT"
 TS="$(date -u +%Y%m%dT%H%M%SZ)"
-export CAMPAIGN_ROOT="/kaggle/working/${TS}-qwen3-dual-4b-int8-torchao"
+export CAMPAIGN_ROOT="/kaggle/working/${TS}-qwen3-embedding-reranker-qdrant-stack-int8-torchao"
 mkdir -p "$CAMPAIGN_ROOT"/{tools,corpus,candidates,summary,package}
 cp "$ROOT"/tools/{int8_perf_app.py,perf_client.py,monitor_candidate.sh,summarize_int8_candidate.py,run_int8_candidate.sh} "$CAMPAIGN_ROOT/tools/"
 cp "$ROOT/corpus/reranker-candidates.json" "$CAMPAIGN_ROOT/corpus/"
@@ -29,7 +29,7 @@ root=Path(sys.argv[1]); rows=[]
 for p in sorted((root/'candidates').glob('*/evidence/candidate-summary.json')):
     rows.append(json.loads(p.read_text()))
 out={
-  'campaign':'DUAL_4B_TRANSFORMERS_TORCHAO_INT8',
+  'campaign':'QWEN3_STACK_TRANSFORMERS_TORCHAO_INT8',
   'frozen_fp16_reference':{
     'embedding_ms':7670.984,
     'reranker_ms':{'2':61569.442,'5':158116.8175,'10':315951.01749999996},
@@ -41,7 +41,7 @@ for r in rows:
     print(r['candidate_id'], r['promotion_classification'], r['speedups_vs_frozen_fp16'])
 PY
 
-FINAL="qwen3-dual-4b-cpu-int8-torchao-results-${TS}.zip"
+FINAL="qwen3-embedding-reranker-qdrant-stack-int8-torchao-results-${TS}.zip"
 cd "$CAMPAIGN_ROOT"
 zip -qry "package/$FINAL" candidates summary preflight.log corpus
 cd package

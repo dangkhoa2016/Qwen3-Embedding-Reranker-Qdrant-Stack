@@ -1,7 +1,6 @@
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-RUNBOOK = ROOT / "OPENCODE_QWEN3_DUAL_4B_CPU_SERVER_KAGGLE_RUNBOOK_2026-08-30.md"
 
 
 def test_start_server_is_single_worker_cpu_safe():
@@ -50,48 +49,3 @@ def test_dependencies_exclude_sentence_transformers_and_do_not_reinstall_torch()
     assert "\ntorch" not in "\n" + text
     assert "transformers" in text
     assert "fastapi" in text
-
-
-def test_secret_scan_uses_external_temp_output_then_copies_result():
-    text = RUNBOOK.read_text(encoding="utf-8")
-
-    assert 'TMP_SCAN="$(mktemp)"' in text
-    assert "--exclude='secret-scan.txt'" in text
-    assert '> "$TMP_SCAN"' in text
-    assert "SECRET_RC=$?" in text
-
-    # RC=1 => no match => PASS
-    assert 'if [ "$SECRET_RC" -eq 1 ]' in text
-
-    # RC=0 => actual secret found => FAIL
-    assert 'elif [ "$SECRET_RC" -eq 0 ]' in text
-
-    # Other return code => scan execution failure
-    assert "secret scan execution error" in text
-
-    # The corrected scan must capture grep output outside RUN_ROOT first.
-    assert (
-        'grep -R --line-number --fixed-string "$DUAL_API_KEY" "$RUN_ROOT"'
-        in text
-    )
-    assert '> "$TMP_SCAN"' in text
-
-    # The old direct grep-output target must not return.
-    old_direct_target = (
-        'grep -R --line-number --fixed-string "$DUAL_API_KEY" "$RUN_ROOT" \\\n'
-        "  --exclude='*.zip' --exclude='*.sha256' \\\n"
-        '  > "$RUN_ROOT/evidence/secret-scan.txt"'
-    )
-    assert old_direct_target not in text
-
-
-def test_source_integrity_requires_authoritative_sidecar():
-    text = RUNBOOK.read_text(encoding="utf-8")
-
-    assert "BLOCKED_AUTHORITATIVE_SIDECAR_MISSING" in text
-    assert "informational" in text.lower()
-    assert "independent" in text.lower()
-
-    # Do not fabricate a new expected sidecar from the archive
-    # and then compare the archive against itself.
-    assert 'sha256sum "$SOURCE_ZIP" > "$SOURCE_SHA"' not in text

@@ -7,7 +7,7 @@ Mô tả thay đổi làm gì và vì sao cần thiết.
 
 ## Phạm vi
 
-- [ ] Chỉ tài liệu / governance
+- [ ] Chỉ documentation / governance
 - [ ] Package/build metadata
 - [ ] Tests/tooling
 - [ ] Runtime/API behavior
@@ -15,10 +15,10 @@ Mô tả thay đổi làm gì và vì sao cần thiết.
 
 ## Qualification boundary
 
-- [ ] Tôi đã kiểm tra thay đổi có chạm protected semantic file hay không.
-- [ ] Nếu có chạm protected semantic file, tôi đã nêu rõ và giải thích có cần requalification không.
+- [ ] Tôi đã kiểm tra thay đổi có chạm qualification-sensitive file hay không.
+- [ ] Nếu có, tôi đã giải thích có cần fresh qualification evidence hay không.
 
-Protected semantic files cho publication-hygiene work:
+Qualification-sensitive files:
 
 ```text
 src/qwen_dual_server/config.py
@@ -30,17 +30,17 @@ tests/test_production_demo.py
 
 ## Verification
 
-Liệt kê command chính xác đã chạy và kết quả chính xác. Không viết “all tests pass” khi audit baseline đã verify là `116 passed, 3 failed, 1 skipped` (expanded hardening suite; same three historical nodes).
+Liệt kê exact commands đã chạy và exact outcomes.
 
 ```text
 <commands and results>
 ```
 
-- [ ] Không có regression failure mới.
-- [ ] Đã chạy static validation phù hợp với các file thay đổi.
-- [ ] Đã chạy lại build/manifest/re-extraction checks nếu package/publication files thay đổi.
-- [ ] Đã xóa secret và private path khỏi log/evidence.
+- [ ] Relevant regression/static checks đã chạy.
+- [ ] Build/manifest/re-extraction checks đã chạy lại nếu package/publication files thay đổi.
+- [ ] Secrets và private paths đã được loại khỏi logs/evidence.
+- [ ] Documentation links và English/Vietnamese pairs đã được kiểm tra khi documentation thay đổi.
 
-## Ảnh hưởng tài liệu / release
+## Documentation / release impact
 
-Liệt kê README, production-demo docs, release notes, metadata hoặc provenance files cần cập nhật đồng bộ.
+Liệt kê README, production-demo docs, release notes, metadata hoặc provenance files cần synchronized updates.

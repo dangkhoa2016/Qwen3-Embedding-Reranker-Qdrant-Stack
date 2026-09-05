@@ -1,16 +1,9 @@
-"""v0.2.3 RED tests: native instruction plumbing regression.
-
-These tests must FAIL (RED) before the corrective is applied.
-They prove the current broken state where instruction cannot be forwarded
-end-to-end through the hybrid endpoint to the llama.cpp backend.
-"""
+"""Regression tests for native instruction transport through the GGUF reranker path."""
 from __future__ import annotations
 
 import json
-import math
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -21,11 +14,11 @@ from qwen_dual_server.gguf_reranker_engine import GGUFRerankerEngine
 
 
 # ---------------------------------------------------------------------------
-# §5 — Application-level regression: instruction causes failure
+# Application-level native instruction transport contract
 # ---------------------------------------------------------------------------
 
 class FakeGGUFRuntime:
-    """Simulates the real runtime with an actual GGUFRerankerEngine that rejects instruction."""
+    """Runtime wrapper around the real GGUF reranker engine contract."""
 
     def __init__(self, gguf_engine):
         self._engine = gguf_engine
@@ -76,8 +69,6 @@ def _make_gguf_engine(tmp_path: Path):
     )
     Path(cfg.reranker_gguf_path).write_bytes(b"gguf")
 
-    from qwen_dual_server.llama_server import LlamaServerProcess
-
     class FakeServer:
         started = False
         closed = False
@@ -114,19 +105,19 @@ def auth():
     return {"Authorization": "Bearer secret"}
 
 
-def test_native_instruction_red_engine_rejects(tmp_path: Path):
-    """GREEN: GGUFRerankerEngine.rerank forwards instruction to backend."""
+def test_native_instruction_transport_engine_forwards_instruction(tmp_path: Path):
+    """GGUFRerankerEngine.rerank forwards instruction to the backend."""
     engine = _make_gguf_engine(tmp_path)
     engine.load()
-    # After corrective: instruction is forwarded, not rejected
+    # The instruction must be forwarded to the backend.
     result = engine.rerank("query", ["doc"], "custom task instruction")
     assert len(result) == 1
     assert result[0]["index"] == 0
     engine.close()
 
 
-def test_native_instruction_red_api_returns_error(monkeypatch, tmp_path: Path):
-    """GREEN: POST /v1/rerank with instruction returns 200."""
+def test_native_instruction_transport_api_accepts_instruction(monkeypatch, tmp_path: Path):
+    """POST /v1/rerank accepts an instruction and returns HTTP 200."""
     engine = _make_gguf_engine(tmp_path)
     runtime = FakeGGUFRuntime(engine)
     app = _make_app(monkeypatch, runtime)
@@ -150,8 +141,8 @@ def test_native_instruction_red_api_returns_error(monkeypatch, tmp_path: Path):
     engine.close()
 
 
-def test_native_instruction_red_probe_evidence(tmp_path: Path, capsys):
-    """GREEN: instruction is forwarded to backend without error."""
+def test_native_instruction_transport_probe(tmp_path: Path, capsys):
+    """The instruction is forwarded to the backend without error."""
     engine = _make_gguf_engine(tmp_path)
     engine.load()
     status = "PASS"
@@ -164,7 +155,7 @@ def test_native_instruction_red_probe_evidence(tmp_path: Path, capsys):
     engine.close()
 
     evidence = (
-        f"NATIVE_INSTRUCTION_RED={status}\n"
+        f"NATIVE_INSTRUCTION_CONTRACT={status}\n"
         f"Detail = {detail}\n"
     )
     print(evidence)
@@ -172,16 +163,11 @@ def test_native_instruction_red_probe_evidence(tmp_path: Path, capsys):
 
 
 # ---------------------------------------------------------------------------
-# §6 — llama.cpp backend: instruction field unsupported/unrecognized
+# llama.cpp backend instruction-field compatibility contract
 # ---------------------------------------------------------------------------
 
-def test_native_instruction_red_llama_server_rejects_instruction():
-    """RED: llama-server /v1/rerank does not accept 'instruction' field.
-
-    We prove this by directly POSTing to the server. If the server is not
-    running, we skip; if it is, we verify the instruction field is either
-    ignored or causes an error.
-    """
+def test_llama_server_instruction_field_contract():
+    """Exercise llama-server instruction-field compatibility when a server is available."""
     import urllib.request
     import urllib.error
 
@@ -202,16 +188,16 @@ def test_native_instruction_red_llama_server_rejects_instruction():
         )
         with urllib.request.urlopen(req, timeout=5) as resp:
             result = json.loads(resp.read())
-            # If it succeeds, the instruction was silently ignored (RED: unsupported)
+            # A successful response must not echo an unsupported request field.
             assert "instruction" not in str(result), (
                 "instruction field should not appear in response - backend does not support it"
             )
-            # RED evidence: instruction was silently dropped
-            print("NATIVE_INSTRUCTION_RED=PASS_EXPECTED_FAILURE")
+            # Record the observed compatibility behavior.
+            print("NATIVE_INSTRUCTION_CONTRACT=PASS_EXPECTED_FAILURE")
             print("llama-server accepted request but silently ignored instruction field")
     except urllib.error.HTTPError as exc:
-        # RED: server returned error for instruction field
-        print(f"NATIVE_INSTRUCTION_RED=PASS_EXPECTED_FAILURE")
+        # The server may reject an unsupported instruction field.
+        print(f"NATIVE_INSTRUCTION_CONTRACT=PASS_EXPECTED_FAILURE")
         print(f"llama-server returned HTTP {exc.code} for instruction field")
     except (urllib.error.URLError, ConnectionRefusedError, OSError):
         pytest.skip("llama-server not running on port 8081")

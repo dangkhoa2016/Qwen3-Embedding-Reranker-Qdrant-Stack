@@ -8,43 +8,36 @@
 ![Qdrant](https://img.shields.io/badge/Qdrant-1.18.3-red)
 ![CPU qualified](https://img.shields.io/badge/CPU-qualified-success)
 
-
-> **Ghi chú badge CI:** badge CI màu xanh có nghĩa các gate blocking của repository đã pass. Nó không thay đổi audit record local được bảo tồn, trong đó có ba failure lịch sử đã biết liên quan environment/Transformers compatibility.
-
-> **Repository:** https://github.com/dangkhoa2016/Qwen3-Embedding-Reranker-Qdrant-Stack  
-> **Release line:** `1.0.0` là public release identity đầu tiên. Việc publish lên package index là bước riêng với GitHub publication.
-
-`qwen3-embedding-reranker-qdrant-stack` là một retrieval stack định hướng production, xây quanh Qwen3-Embedding-4B, Qwen3-Reranker-4B và Qdrant. Dự án cung cấp FastAPI service theo hướng CPU cùng một production-demo Qdrant 20K point có khả năng tái hiện, đã được qualification trên một fresh Kaggle CPU session. Đây là dự án embedding/retrieval/reranking, **không phải chat-LLM server**.
+`qwen3-embedding-reranker-qdrant-stack` là retrieval stack định hướng production, xây quanh Qwen3-Embedding-4B, Qwen3-Reranker-4B và Qdrant. Dự án cung cấp FastAPI service theo hướng CPU cùng production demo Qdrant song ngữ 20K point có khả năng tái hiện. Đây là dự án embedding/retrieval/reranking, không phải chat-LLM server.
 
 ## Dự án cung cấp những gì
 
 - REST API có bearer authentication cho Qwen3 embeddings và reranking.
-- `Qwen/Qwen3-Embedding-4B` qua Transformers / PyTorch với qualified CPU FP16 profile.
+- `Qwen/Qwen3-Embedding-4B` qua Transformers / PyTorch với CPU FP16 profile đã được kiểm chứng.
 - Hai reranker backend:
-  - Transformers cho default chung của source tree;
-  - GGUF `Q4_K_M` qua hardened llama.cpp runtime cho qualified production demo.
-- Kiểm tra chặt request-size, queue, concurrency, memory-headroom và startup/readiness.
-- Workflow với Qdrant `1.18.3` canonical 20K bilingual snapshot cho qualified retrieval demo.
-- Tài liệu reproducibility, evidence/provenance records, operator scripts và Kaggle notebook.
+  - Transformers cho source-tree mặc định chung;
+  - GGUF `Q4_K_M` qua llama.cpp runtime đã được harden cho production demo.
+- Kiểm soát request-size, queue, concurrency, memory-headroom, startup và readiness.
+- Workflow Qdrant `1.18.3` với canonical snapshot song ngữ 20K point.
+- Tài liệu reproducibility, operator scripts, provenance records và Kaggle notebook thực thi được.
 
-Các model file lớn, GGUF artifact, hardened llama runtime và Qdrant snapshot được chủ đích **không bundle** trong Python package.
+Các model file lớn, GGUF artifact, llama.cpp runtime và Qdrant snapshot được chủ đích **không bundle** trong Python package.
 
-## Qualified baseline tóm tắt
+## Kiểm chứng production
 
-Trạng thái Stage-II R10 qualification đã chấp nhận:
+Production-demo profile của `1.0.0` đã được kiểm chứng trên một fresh Kaggle CPU session:
 
 ```text
-STAGE2_R10_QUALIFICATION=PASS
-STAGE2_R3_TO_R10=CLOSED
-SEMANTIC_3_OF_3=True
-OOM_GATE=PASS
-RUN_ALL_WITHIN_600S=True
-K5_DEFAULT=ACCEPT
-K2_FALLBACK=NOT_JUSTIFIED
-FINAL_RELEASE_DEFAULT=K5_READY
+Production qualification: PASS
+Semantic validation: 3/3 PASS
+cgroup OOM events: 0
+cgroup OOM-kill events: 0
+Run All: 594.964s
+Qualification threshold: 600s
+Retrieval default: K=5
 ```
 
-Thời gian post-package Run-All đo được là `594.964s` so với qualification gate `600s`. Kết quả sát ngưỡng này là evidence cho đúng qualified Kaggle setup, **không phải cam kết performance chung** cho mọi CPU host.
+Kết quả thời gian chỉ áp dụng cho môi trường đã được kiểm chứng và **không** phải cam kết hiệu năng chung cho mọi CPU.
 
 ## Kiến trúc
 
@@ -54,7 +47,7 @@ REST request
   -> Qwen3-Embedding-4B
   -> normalized Float32[2560] embedding
 
-Qualified production-demo path:
+Production-demo retrieval path:
 query
   -> Qwen3-Embedding-4B (Transformers / PyTorch CPU FP16)
   -> Qdrant 1.18.3 / canonical 20K bilingual snapshot
@@ -63,7 +56,7 @@ query
   -> final ranked results
 ```
 
-Default của qualified production demo là `K=5`. K=2 chỉ còn là historical fallback branch và **không được justified bởi final R10 evidence**.
+Độ sâu truy hồi của production demo là `K=5`.
 
 ## Yêu cầu
 
@@ -71,22 +64,22 @@ Default của qualified production demo là `K=5`. K=2 chỉ còn là historical
 
 Yêu cầu Python `>=3.10`.
 
-PyTorch được chủ đích **không cài bởi `requirements.txt` hoặc package metadata**. Qualified Kaggle environment đã cung cấp PyTorch; tự động thay runtime đó có thể làm mất tính tương đương với môi trường test hoặc tiêu tốn nhiều disk. Khi chạy ngoài môi trường đó, hãy tự cài PyTorch build phù hợp với CPU/host của bạn.
+PyTorch được chủ đích **không cài bởi `requirements.txt` hoặc package metadata**. Khi chạy ngoài môi trường đã có sẵn PyTorch, hãy cài bản PyTorch phù hợp với host.
 
 ### External model/runtime assets
 
-Một local deployment đầy đủ cần các asset phù hợp backend đã chọn:
+Một deployment đầy đủ cần các asset theo backend đã chọn:
 
 1. Model files Transformers của `Qwen/Qwen3-Embedding-4B`.
-2. Với Transformers reranker backend mặc định, model files Qwen3 reranker tương thích.
-3. Với qualified GGUF production-demo backend, `Qwen3-Reranker-4B.Q4_K_M.gguf` cùng qualified hardened llama runtime.
-4. Với Qdrant production demo, canonical `knowledge_entities_qwen3_4b_text_v21-20260827T013824Z.snapshot`.
+2. Model files Qwen3 reranker Transformers tương thích cho Transformers reranker backend.
+3. `Qwen3-Reranker-4B.Q4_K_M.gguf` cùng llama.cpp runtime đã được kiểm chứng cho GGUF production-demo backend.
+4. `knowledge_entities_qwen3_4b_text_v21-20260827T013824Z.snapshot` cho Qdrant production demo.
 
-Exact qualified identities được ghi trong `STAGE2_R10_QUALIFICATION.vi.md`/`STAGE2_R10_QUALIFICATION.md` và `PRODUCTION_DEMO_PROVENANCE.vi.md`/`PRODUCTION_DEMO_PROVENANCE.md`.
+Các runtime/data identity đã được xác minh được ghi trong `PRODUCTION_QUALIFICATION.vi.md` và `PRODUCTION_DEMO_PROVENANCE.vi.md`.
 
 ## Cài đặt
 
-Vì dự án chưa được publish lên package index, hãy cài từ source hiện tại thay vì giả định registry package đã tồn tại:
+Dự án hiện chưa được publish lên package index, vì vậy hãy cài từ source:
 
 ```bash
 python -m venv .venv
@@ -101,19 +94,19 @@ Development/test dependencies:
 python -m pip install -r requirements-dev.txt
 ```
 
-Cài PyTorch runtime phù hợp riêng như mô tả ở trên.
+Cài PyTorch runtime phù hợp riêng.
 
 ## Khởi động nhanh
 
 Launcher được commit bind localhost mặc định và từ chối start nếu không có authentication, trừ khi insecure no-auth mode được bật rõ ràng.
 
-1. Copy và chỉnh environment template:
+1. Copy environment template:
 
 ```bash
 cp .env.example .env
 ```
 
-2. Tối thiểu, đặt API key mạnh và model path hợp lệ cho backend đang dùng:
+2. Đặt API key mạnh và model path hợp lệ:
 
 ```text
 DUAL_API_KEY=<strong-random-secret>
@@ -121,12 +114,12 @@ EMBEDDING_MODEL_PATH=/absolute/path/to/Qwen3-Embedding-4B
 RERANKER_MODEL_PATH=/absolute/path/to/Qwen3-Reranker-4B
 ```
 
-Với GGUF reranker backend, dùng:
+Với GGUF reranker backend:
 
 ```text
 RERANKER_BACKEND=llama_cpp
 RERANKER_GGUF_PATH=/absolute/path/to/Qwen3-Reranker-4B.Q4_K_M.gguf
-LLAMA_SERVER_BIN=/absolute/path/to/qualified/llama-server-patched
+LLAMA_SERVER_BIN=/absolute/path/to/qualified/llama-server
 ```
 
 3. Export environment và start service:
@@ -145,7 +138,7 @@ curl -s http://127.0.0.1:8000/health
 curl -s http://127.0.0.1:8000/ready
 ```
 
-`/ready` trả HTTP `503` cho tới khi runtime báo ready.
+`/ready` trả HTTP `503` cho tới khi runtime ready.
 
 ## Tổng quan API
 
@@ -183,17 +176,13 @@ curl -s http://127.0.0.1:8000/v1/rerank \
   -d '{"query":"capital of Japan","documents":["Tokyo","Osaka"],"return_documents":true}'
 ```
 
-Request instruction là optional và bị giới hạn bởi:
+Optional request instructions bị giới hạn bởi:
 
 ```text
 MAX_INSTRUCTION_CHARS=1024
 ```
 
-Các request/concurrency limit khác được mô tả trong `.env.example` và enforce bởi application settings.
-
 ## Safe CPU defaults
-
-Publication candidate giữ conservative profile đã qualification:
 
 ```text
 MODEL_DTYPE=float16
@@ -206,22 +195,21 @@ ALLOW_REMOTE_MODEL_DOWNLOAD=0
 UVICORN_WORKERS=1
 ```
 
-Production-demo profile dùng hai CPU threads trong qualification. Không được coi worker count lớn hơn hoặc parallel inference là validated chỉ vì host có nhiều core hơn.
+Production-demo profile đã kiểm chứng dùng hai CPU threads. Worker count lớn hơn hoặc parallel inference cần được kiểm chứng độc lập.
 
 ## Qualified Qdrant production demo
 
-Production demo restore canonical 20K snapshot; nó không rebuild hoặc re-embed collection.
+Demo restore canonical 20K snapshot; không rebuild hoặc re-embed collection.
 
 Bắt đầu với:
 
-- `README_PRODUCTION_DEMO.md` — hướng dẫn production demo tiếng Anh;
-- `README_PRODUCTION_DEMO.vi.md` — hướng dẫn production demo tiếng Việt;
-- `guide-production-demo.md` / `.vi.md` — hướng dẫn Run-All ngắn gọn;
+- `README_PRODUCTION_DEMO.vi.md` — hướng dẫn production demo;
+- `guide-production-demo.vi.md` — hướng dẫn Run-All ngắn gọn;
 - `notebooks/qwen3_embedding_reranker_qdrant_kaggle_demo.ipynb` — notebook thực thi;
-- `STAGE2_R10_QUALIFICATION.md` / `.vi.md` — qualification summary đã chấp nhận;
-- `PRODUCTION_DEMO_PROVENANCE.md` / `.vi.md` — provenance source/runtime/artifact.
+- `PRODUCTION_QUALIFICATION.vi.md` — qualification summary công khai;
+- `PRODUCTION_DEMO_PROVENANCE.vi.md` — provenance runtime/data/artifact.
 
-Qualified Qdrant contract:
+Qdrant contract đã xác minh:
 
 ```text
 Qdrant version: 1.18.3
@@ -232,24 +220,9 @@ Distance: cosine
 Retrieval default: K=5
 ```
 
-## Authentication và deployment safety
-
-Authentication fail-closed mặc định:
-
-```text
-DUAL_API_KEY=<required unless explicitly disabled>
-ALLOW_INSECURE_NO_AUTH=0
-```
-
-`ALLOW_INSECURE_NO_AUTH=1` chỉ dành cho controlled localhost testing. Launcher đi kèm bind `127.0.0.1` mặc định và không tự cấu hình public TLS termination.
-
-`TRUST_PROXY_HEADERS=1` nghĩa client rate-limit identity có thể dùng `X-Forwarded-For`. Chỉ giữ setting này khi request đi qua trusted reverse proxy có sanitize forwarding headers; nếu không hãy đặt `TRUST_PROXY_HEADERS=0`.
-
-Đọc `SECURITY.vi.md`/`SECURITY.md` trước khi expose service ra ngoài trusted local environment.
-
 ## Development và verification
 
-Targeted/static checks:
+Các check local nên chạy:
 
 ```bash
 PYTHONPATH=src pytest -q
@@ -257,55 +230,30 @@ python -m compileall -q src scripts
 bash -n scripts/*.sh
 ```
 
-Pre-hardening publication-audit baseline được giữ lại là:
-
-```text
-111 passed, 3 failed, 1 skipped
-KNOWN_BASELINE_FAILURES=3
-```
-
-Snapshot expanded local audit được bảo tồn từ giai đoạn bilingual/governance/CI hardening ghi nhận:
-
-```text
-HISTORICAL_LOCAL_EXPANDED_SUITE=116 passed, 3 failed, 1 skipped
-KNOWN_HISTORICAL_FAILURES=3
-NEW_REGRESSION_FAILURES=0
-FAILURE_SET_MATCHES_PRE_HARDENING_BASELINE=PASS
-```
-
-Các con số trên là historical audit evidence, không phải live blocking-CI count. Release-candidate blocking gate hiện tại ghi nhận:
-
-```text
-BLOCKING_CI_SUITE=119 passed, 1 skipped, 3 deselected
-HISTORICAL_COMPATIBILITY_PROBES=executed separately
-```
-
-Ba engine-contract node là toàn bộ failure set trong historical local audit đã được bảo tồn. CI giữ chúng thành các compatibility probe riêng; kết quả dưới dependency environment hiện tại không viết lại historical record đó. **Không** được tóm tắt repository thành “all tests pass”; claim release-facing chính xác là các blocking CI gate pass.
+GitHub CI kiểm tra Python 3.10 và 3.12, chạy blocking regression suite, chạy riêng ba compatibility probe và xác minh wheel/sdist.
 
 ## Bảo mật
 
-Đọc `SECURITY.vi.md`/`SECURITY.md` trước deployment hoặc báo vulnerability. Báo cáo security-sensitive phải gửi riêng thay vì public issue.
+Đọc `SECURITY.vi.md` trước deployment hoặc báo vulnerability. Báo cáo security-sensitive phải gửi riêng thay vì public issue.
 
 ## Đóng góp
 
-Yêu cầu contribution và verification nằm trong `CONTRIBUTING.vi.md`/`CONTRIBUTING.md`. Đặc biệt, Stage-II qualified semantic files có requalification boundary rõ ràng: publication-hygiene changes không được âm thầm thay đổi chúng.
-
-GitHub issue và pull-request templates nằm dưới `.github/`.
+Yêu cầu contribution và verification nằm trong `CONTRIBUTING.vi.md`. Thay đổi vào runtime files nhạy cảm với qualification cần review rõ ràng và fresh evidence khi behavior thay đổi.
 
 ## Hạn chế đã biết
 
-- Qualified baseline phụ thuộc CPU và Kaggle; không phải cam kết throughput/latency chung.
-- Load hai model cỡ 4B tốn nhiều RAM. Runtime có memory-headroom và OOM gates nhưng operator vẫn cần host RAM và swap policy phù hợp.
-- Package không bundle PyTorch, model weights, GGUF files, Qdrant data hoặc hardened llama runtime.
-- Launcher chủ đích single-worker theo qualified CPU memory model.
+- Baseline đã kiểm chứng phụ thuộc CPU và Kaggle; không phải cam kết throughput/latency chung.
+- Load hai model cỡ 4B tốn nhiều RAM; operator cần đủ host RAM và swap policy phù hợp.
+- Package không bundle PyTorch, model weights, GGUF files, Qdrant data hoặc llama.cpp runtime.
+- Launcher chủ đích single-worker theo CPU memory model đã kiểm chứng.
 - Built-in bearer authentication và fixed-window rate limiting không thay thế network isolation, TLS, reverse-proxy hardening hay abuse protection đầy đủ khi internet-facing.
-- Việc publish source, GitHub tag/Release `v1.0.0` và package-index/PyPI publication là các kênh phát hành riêng và được kiểm chứng độc lập.
+- GitHub source/release publication và package-index publication là các kênh riêng.
 
 ## Khả năng tái hiện và nguồn gốc
 
-Thông tin về quá trình kiểm chứng và nguồn gốc được ghi trong `PRODUCTION_DEMO_PROVENANCE.vi.md`/`PRODUCTION_DEMO_PROVENANCE.md`, `STAGE2_R10_QUALIFICATION.vi.md`/`STAGE2_R10_QUALIFICATION.md`, `PRE_PUBLISH_NOTES.vi.md`/`PRE_PUBLISH_NOTES.md` và `VERIFICATION_SUMMARY.txt`.
+Kết quả qualification nằm trong `PRODUCTION_QUALIFICATION.vi.md`; runtime và artifact identities nằm trong `PRODUCTION_DEMO_PROVENANCE.vi.md`.
 
-Các thay đổi ảnh hưởng đến hành vi đã được kiểm chứng cần có bằng chứng kiểm chứng mới; hướng dẫn đóng góp nằm trong `CONTRIBUTING.vi.md`/`CONTRIBUTING.md`.
+Các thay đổi ảnh hưởng behavior đã được kiểm chứng cần fresh qualification evidence.
 
 ## Giấy phép
 

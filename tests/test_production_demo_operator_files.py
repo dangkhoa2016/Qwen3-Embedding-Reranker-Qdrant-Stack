@@ -29,7 +29,7 @@ def test_snapshot_restore_script_locks_canonical_collection_and_invariants():
     assert "snapshots/upload?wait=true&priority=snapshot" in text
 
 
-def test_notebook_is_valid_and_exposes_k5_default_and_stronger_host_example():
+def test_notebook_is_valid_and_exposes_published_k5_default_and_stronger_host_example():
     path = ROOT / "notebooks/qwen3_embedding_reranker_qdrant_kaggle_demo.ipynb"
     notebook = json.loads(path.read_text())
     assert notebook["nbformat"] == 4
@@ -46,6 +46,11 @@ def test_notebook_is_valid_and_exposes_k5_default_and_stronger_host_example():
     assert "MEMORY_EVENTS_BEFORE" in sources
     assert "oom_delta" in sources
     assert "oom_kill_delta" in sources
+    assert "qualification_gate" in sources
+    assert "PRODUCTION_QUALIFICATION=PASS" in sources
+    assert "assert qualification_gate, summary" in sources
+    assert "K5" + "_DEFAULT=" not in sources
+    assert "FALLBACK" + "_TO_K2" not in sources
     assert "Node.js" not in sources
 
 

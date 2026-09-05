@@ -1,6 +1,0 @@
-BASELINE_PROJECT=qwen3-dual-4b-cpu-rest-server
-BASELINE_VERSION=v0.1.1
-BASELINE_HEAD=684b082c730adf8283efc02a7620c9bee878d18f
-BASELINE_TREE=a742e6e266f19ca7c3526a0796256c56cae58cc9
-BASELINE_SOURCE_CHANGED=NO (canonical source remains immutable; this directory is an experimental copy)
-EXPERIMENT=DUAL_4B_TRANSFORMERS_TORCHAO_INT8
